@@ -3,132 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>MX跨境电商情报看板 | 2026-10-13 | v1.0</title>
+<title>MX跨境电商情报看板 | 2026-10-13 | v1.1</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<style>
-:root {
-  --bg: #f5f6f8; --bg-card: #ffffff; --bg-card-hover: #f0f2f6;
-  --bg-elevated: #ffffff; --border-color: #e2e4e9;
-  --navy: #0f1f3d; --navy-soft: #1f3a66; --text-primary: #16213e; --text-secondary: #5b6472; --text-tertiary: #8b93a1;
-  --signal-red: #d7372b; --signal-red-bg: rgba(215, 55, 43, 0.08); --signal-red-border: rgba(215, 55, 43, 0.35);
-  --signal-yellow: #b8860b; --signal-yellow-bg: rgba(184, 134, 11, 0.09); --signal-yellow-border: rgba(184, 134, 11, 0.35);
-  --signal-green: #2f7a4d; --signal-green-bg: rgba(47, 122, 77, 0.08); --signal-green-border: rgba(47, 122, 77, 0.3);
-  --accent: #0f1f3d; --accent-hover: #1f3a66; --accent-bg: rgba(15, 31, 61, 0.06);
-  --spacing-xs: 4px; --spacing-sm: 8px; --spacing-md: 16px; --spacing-lg: 24px; --spacing-xl: 32px; --spacing-2xl: 48px;
-  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
-  --shadow-sm: 0 1px 2px rgba(15,31,61,0.06); --shadow-lg: 0 10px 20px -5px rgba(15,31,61,0.1);
-  --nav-height: 60px; --sidebar-width: 240px;
-  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  font-size: 14px; line-height: 1.6; color: var(--text-primary); background: var(--bg);
-}
-a { color: var(--accent); text-decoration: none; }
-a:hover { color: var(--accent-hover); text-decoration: underline; }
-img { max-width: 100%; }
-[hidden] { display: none !important; }
-
-.navbar {
-  position: fixed; top: env(safe-area-inset-top, 0px); left: 0; right: 0; height: var(--nav-height);
-  background: var(--bg-elevated); border-bottom: 1px solid var(--border-color);
-  display: flex; align-items: center; padding: 0 var(--spacing-lg); z-index: 100; gap: var(--spacing-md);
-}
-.navbar-brand { font-size: 16px; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: var(--spacing-sm); white-space: nowrap; }
-.navbar-brand .flag { font-size: 20px; }
-.navbar-meta { font-size: 12px; color: var(--text-tertiary); display: flex; gap: var(--spacing-md); margin-left: var(--spacing-md); flex-wrap: wrap; }
-.navbar-controls { display: flex; align-items: center; gap: var(--spacing-sm); margin-left: auto; }
-.pill {
-  padding: 6px 12px; background: var(--bg-card-hover); border: 1px solid var(--border-color); border-radius: var(--radius-md);
-  font-size: 12px; color: var(--text-secondary); white-space: nowrap;
-}
-.menu-toggle { display: none; }
-
-.layout { display: flex; padding-top: var(--nav-height); }
-.sidebar {
-  position: fixed; top: calc(var(--nav-height) + env(safe-area-inset-top, 0px)); left: 0; width: var(--sidebar-width);
-  height: calc(100vh - var(--nav-height)); background: var(--bg-elevated);
-  border-right: 1px solid var(--border-color); overflow-y: auto; padding: var(--spacing-lg) 0;
-}
-.sidebar-nav { list-style: none; }
-.sidebar-section-title {
-  padding: var(--spacing-sm) var(--spacing-lg); font-size: 11px; font-weight: 700;
-  color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px;
-}
-.sidebar-item {
-  display: flex; align-items: center; gap: 8px;
-  padding: 9px var(--spacing-lg); color: var(--text-secondary); font-size: 13.5px; cursor: pointer;
-  border-left: 3px solid transparent;
-}
-.sidebar-item:hover { color: var(--navy); background: var(--bg-card-hover); text-decoration: none; }
-.sidebar-item.sig-red .dot { background: var(--signal-red); }
-.sidebar-item.sig-yellow .dot { background: var(--signal-yellow); }
-.sidebar-item.sig-green .dot { background: var(--signal-green); }
-.dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
-.count-badge { margin-left: auto; font-size: 11px; color: var(--text-tertiary); }
-
-.main-content { margin-left: var(--sidebar-width); flex: 1; padding: var(--spacing-xl); max-width: calc(100vw - var(--sidebar-width)); }
-.content-section { margin-bottom: var(--spacing-2xl); scroll-margin-top: calc(var(--nav-height) + 20px); }
-.section-title { font-size: 22px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
-.section-subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: var(--spacing-lg); }
-
-.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-lg); }
-.kpi-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: var(--spacing-md); box-shadow: var(--shadow-sm); }
-.kpi-value { font-size: 26px; font-weight: 700; color: var(--navy); }
-.kpi-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-.kpi-card.red .kpi-value { color: var(--signal-red); }
-.kpi-card.yellow .kpi-value { color: var(--signal-yellow); }
-.kpi-card.green .kpi-value { color: var(--signal-green); }
-
-.top-signal-box {
-  background: var(--bg-card); border: 1px solid var(--border-color); border-left: 4px solid var(--navy);
-  border-radius: var(--radius-lg); padding: var(--spacing-lg); box-shadow: var(--shadow-sm); margin-bottom: var(--spacing-xl);
-}
-.top-signal-box h3 { color: var(--navy); font-size: 15px; margin-bottom: 8px; }
-.top-signal-box p { color: var(--text-primary); font-size: 14px; }
-
-.card {
-  background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg);
-  padding: var(--spacing-lg); margin-bottom: var(--spacing-md); box-shadow: var(--shadow-sm);
-  border-left: 4px solid var(--border-color);
-}
-.card.sig-red { border-left-color: var(--signal-red); }
-.card.sig-yellow { border-left-color: var(--signal-yellow); }
-.card.sig-green { border-left-color: var(--signal-green); }
-.card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--spacing-md); flex-wrap: wrap; }
-.card-title { font-size: 16px; font-weight: 700; color: var(--navy); }
-.badge {
-  font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; white-space: nowrap;
-}
-.badge.red { background: var(--signal-red-bg); color: var(--signal-red); border: 1px solid var(--signal-red-border); }
-.badge.yellow { background: var(--signal-yellow-bg); color: var(--signal-yellow); border: 1px solid var(--signal-yellow-border); }
-.badge.green { background: var(--signal-green-bg); color: var(--signal-green); border: 1px solid var(--signal-green-border); }
-.badge.tier { background: var(--accent-bg); color: var(--navy); border: 1px solid var(--border-color); }
-.card-meta { font-size: 12px; color: var(--text-tertiary); margin: 6px 0 12px; display: flex; gap: 10px; flex-wrap: wrap; }
-.card-section-label { font-size: 11px; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.4px; margin: 10px 0 4px; }
-.card ul { padding-left: 18px; }
-.card li { margin-bottom: 4px; }
-.card .reason { font-size: 13px; color: var(--text-secondary); font-style: italic; margin-top: 4px; }
-
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border-color); }
-th { color: var(--text-tertiary); font-weight: 600; font-size: 11.5px; text-transform: uppercase; }
-.table-wrap { overflow-x: auto; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: var(--spacing-md); box-shadow: var(--shadow-sm); }
-.status-ok { color: var(--signal-green); font-weight: 600; }
-.status-semi { color: var(--signal-yellow); font-weight: 600; }
-
-footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg) 0 var(--spacing-2xl); }
-
-@media (max-width: 860px) {
-  .sidebar { transform: translateX(-100%); transition: transform .2s; z-index: 90; box-shadow: var(--shadow-lg); }
-  .sidebar.open { transform: translateX(0); }
-  .main-content { margin-left: 0; max-width: 100vw; padding: var(--spacing-md); }
-  .menu-toggle { display: inline-flex; }
-  .navbar-meta { display: none; }
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -137,10 +14,11 @@ footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg
   <div class="navbar-brand"><span class="flag">🇲🇽</span>MX跨境电商情报看板</div>
   <div class="navbar-meta">
     <span>更新至 2026-10-13</span>
-    <span>v1.0</span>
+    <span>v1.1</span>
     <span>服务对象：ML México 跨境卖家决策者</span>
   </div>
   <div class="navbar-controls">
+    <a class="pill" href="archive.html">历史存档</a>
     <span class="pill">下次更新：每日自动</span>
   </div>
 </nav>
@@ -151,17 +29,18 @@ footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg
       <li class="sidebar-section-title">总览</li>
       <li><a class="sidebar-item" href="#top">今日Top信号</a></li>
 
-      <li class="sidebar-section-title" style="margin-top:12px;">七大分类</li>
+      <li class="sidebar-section-title" style="margin-top:12px;">七大分类（近15天）</li>
       <li><a class="sidebar-item sig-red" href="#reg"><span class="dot"></span>监管动态<span class="count-badge">1</span></a></li>
       <li><a class="sidebar-item sig-red" href="#tax"><span class="dot"></span>税务<span class="count-badge">2</span></a></li>
       <li><a class="sidebar-item sig-red" href="#customs"><span class="dot"></span>清关/海关<span class="count-badge">2</span></a></li>
-      <li><a class="sidebar-item sig-green" href="#logistics"><span class="dot"></span>物流<span class="count-badge">1</span></a></li>
-      <li><a class="sidebar-item sig-green" href="#ml"><span class="dot"></span>ML官方数据/政策<span class="count-badge">1</span></a></li>
+      <li><a class="sidebar-item sig-green" href="#logistics"><span class="dot"></span>物流<span class="count-badge">0</span></a></li>
+      <li><a class="sidebar-item sig-green" href="#ml"><span class="dot"></span>ML官方数据/政策<span class="count-badge">0</span></a></li>
       <li><a class="sidebar-item sig-yellow" href="#platform"><span class="dot"></span>平台政策<span class="count-badge">1</span></a></li>
-      <li><a class="sidebar-item sig-yellow" href="#competition"><span class="dot"></span>竞争与消费趋势<span class="count-badge">2</span></a></li>
+      <li><a class="sidebar-item sig-yellow" href="#competition"><span class="dot"></span>竞争与消费趋势<span class="count-badge">1</span></a></li>
 
       <li class="sidebar-section-title" style="margin-top:12px;">方法论</li>
       <li><a class="sidebar-item" href="#sources">数据源监控清单</a></li>
+      <li><a class="sidebar-item" href="archive.html">历史存档（15天以上）</a></li>
     </ul>
   </aside>
 
@@ -169,38 +48,33 @@ footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg
 
     <section class="content-section" id="top">
       <div class="section-title">今日Top信号</div>
-      <div class="section-subtitle">2026-10-13 · 面向在 Mercado Libre México 上经营、从海外进口商品销售的卖家决策者</div>
+      <div class="section-subtitle">2026-10-13 · 面向在 Mercado Libre México 上经营、从海外进口商品销售的卖家决策者 · 仅展示最近15天内新发现的信号，更早的内容见<a href="archive.html">历史存档</a></div>
 
       <div class="kpi-grid">
         <div class="kpi-card red"><div class="kpi-value">3</div><div class="kpi-label">🔴 需立即关注</div></div>
-        <div class="kpi-card yellow"><div class="kpi-value">2</div><div class="kpi-label">🟡 持续跟踪</div></div>
-        <div class="kpi-card green"><div class="kpi-value">2</div><div class="kpi-label">🟢 仅供参考</div></div>
+        <div class="kpi-card yellow"><div class="kpi-value">4</div><div class="kpi-label">🟡 持续跟踪</div></div>
+        <div class="kpi-card green"><div class="kpi-value">0</div><div class="kpi-label">🟢 仅供参考</div></div>
         <div class="kpi-card"><div class="kpi-value">18.26</div><div class="kpi-label">USD/MXN（10-12参考价）</div></div>
       </div>
 
       <div class="top-signal-box">
         <h3>一句话总结</h3>
-        <p>
-          最紧急的是清关合规动作：<b>电子价值声明(MVE)的申报宽限期延至10月31日，11月1日起将通过VUCEM分阶段强制执行</b>，
-          报关资料/系统若未就位，11月起可能影响清关时效。同时，<b>对无自贸协定国家（含中国）商品的50%关税改革和33.5%包裹统一税率</b>
-          仍是2026年进口成本的核心变量，持续推高终端售价并促使部分消费者转向本地卖家。另外，<b>平台代扣ISR税率已从1%上调至2.5%</b>，
-          直接压缩到账利润，建议核对最新结算单核实扣缴比例。NOM电商合规新规（PNIC 2026）要求线上商品与实体店同等合规，建议排查现有SKU的标签合规风险。
-        </p>
+        <p>最紧急的是清关合规动作：<b>电子价值声明(MVE)的申报宽限期延至10月31日，11月1日起将通过VUCEM分阶段强制执行</b>，报关资料/系统若未就位，11月起可能影响清关时效。同时，<b>对无自贸协定国家（含中国）商品的50%关税改革和33.5%包裹统一税率</b>仍是2026年进口成本的核心变量，持续推高终端售价并促使部分消费者转向本地卖家。另外，<b>平台代扣ISR税率已从1%上调至2.5%</b>，直接压缩到账利润，建议核对最新结算单核实扣缴比例。NOM电商合规新规（PNIC 2026）要求线上商品与实体店同等合规，建议排查现有SKU的标签合规风险。</p>
       </div>
     </section>
 
     <section class="content-section" id="reg">
       <div class="section-title">⚖️ 监管动态</div>
       <div class="section-subtitle">DOF / Secretaría de Economía / SAT 官方公告</div>
-
+      
       <div class="card sig-red">
         <div class="card-head">
           <div class="card-title">🚨 对无自贸协定国家商品关税改革：最高50%，电商包裹统一税率33.5%</div>
           <span class="badge red">🔴 高</span>
         </div>
         <div class="card-meta">
-          <span class="badge tier">一级/二级信源</span>
-          <span>Reglas Generales de Comercio Exterior 2026（DOF/SAT）· FreightWaves · 2026-01 生效，持续至今</span>
+          <span class="badge tier">1级信源</span>
+          <span><a href="https://dof.gob.mx/nota_detalle_popup.php?codigo=5777199" target="_blank" rel="noopener">Reglas Generales de Comercio Exterior 2026（DOF/SAT）</a> · 2026-01-01</span>
         </div>
         <div class="card-section-label">事实</div>
         <ul>
@@ -221,15 +95,15 @@ footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg
     <section class="content-section" id="tax">
       <div class="section-title">💰 税务</div>
       <div class="section-subtitle">SAT / Resolución Miscelánea Fiscal / Ley de Ingresos de la Federación</div>
-
+      
       <div class="card sig-red">
         <div class="card-head">
           <div class="card-title">💰 简易清关包裹综合税率33.5%持续执行，de minimis门槛（50美元以下免关税）维持但处于评估中</div>
           <span class="badge red">🔴 高</span>
         </div>
         <div class="card-meta">
-          <span class="badge tier">一级信源</span>
-          <span>SAT RGCE 2026 · 2025-08-15 生效，2026-10-08 媒体复核报道</span>
+          <span class="badge tier">1级信源</span>
+          <span><a href="https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rgce/rgce/ReglasGeneralesComercioExteriorpara2026.pdf" target="_blank" rel="noopener">SAT Reglas Generales de Comercio Exterior 2026</a> · 2025-08-15</span>
         </div>
         <div class="card-section-label">事实</div>
         <ul>
@@ -252,8 +126,8 @@ footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg
           <span class="badge yellow">🟡 中</span>
         </div>
         <div class="card-meta">
-          <span class="badge tier">一级信源（法律）/ 二级信源（解读）</span>
-          <span>Ley de Ingresos de la Federación 2026 · 自2026-01-01生效</span>
+          <span class="badge tier">2级信源</span>
+          <span><a href="https://contarito.com.mx/blog/impuestos-mercadolibre-vendedores-mexico-2026/" target="_blank" rel="noopener">Ley de Ingresos de la Federación 2026（行业解读：Contarito）</a> · 2026-01-01</span>
         </div>
         <div class="card-section-label">事实</div>
         <ul>
@@ -274,15 +148,15 @@ footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg
     <section class="content-section" id="customs">
       <div class="section-title">📋 清关/海关</div>
       <div class="section-subtitle">ANAM / VUCEM / NOM 合规要求</div>
-
+      
       <div class="card sig-red">
         <div class="card-head">
           <div class="card-title">🚨 电子价值声明(MVE)宽限期延至10月31日，11月1日起分阶段通过VUCEM强制执行</div>
           <span class="badge red">🔴 高</span>
         </div>
         <div class="card-meta">
-          <span class="badge tier">一级信源</span>
-          <span>ANAM 新闻公报 · 2026-10</span>
+          <span class="badge tier">1级信源</span>
+          <span><a href="https://www.anam.gob.mx/comunicado-de-prensa-92-2026/" target="_blank" rel="noopener">ANAM 新闻公报92/2026</a> · 2026-10-10</span>
         </div>
         <div class="card-section-label">事实</div>
         <ul>
@@ -306,8 +180,8 @@ footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg
           <span class="badge yellow">🟡 中</span>
         </div>
         <div class="card-meta">
-          <span class="badge tier">二级信源</span>
-          <span>行业合规媒体解读 · 2026</span>
+          <span class="badge tier">2级信源</span>
+          <span><a href="https://vinculum.mx/2026/03/31/pnic-2026-nuevas-reglas-para-etiquetado-y-cumplimiento/" target="_blank" rel="noopener">PNIC 2026 解读（Vinculum）</a> · 2026-03-31</span>
         </div>
         <div class="card-section-label">事实</div>
         <ul>
@@ -327,24 +201,19 @@ footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg
     <section class="content-section" id="logistics">
       <div class="section-title">📦 物流</div>
       <div class="section-subtitle">Correos de México / 国际快递商 / 跨境仓配</div>
-
+      
       <div class="card sig-green">
         <div class="card-head">
-          <div class="card-title">ℹ️ 本期未检索到Mercado Envíos或主要快递商官方费率/时效变更公告</div>
+          <div class="card-title">ℹ️ 近15天内暂无「物流」分类的新增信号</div>
           <span class="badge green">🟢 参考</span>
         </div>
         <div class="card-meta">
           <span class="badge tier">监控说明</span>
-          <span>持续监控中 · 2026-10-13</span>
+          <span>持续监控中</span>
         </div>
-        <div class="card-section-label">事实</div>
+        <div class="card-section-label">说明</div>
         <ul>
-          <li>本次检索周期内，未发现Correos de México、DHL/FedEx/UPS/Estafeta墨西哥官方渠道发布的新清关时效或附加费公告。</li>
-          <li>行业分析普遍指出2026年物流商整体面临关税合规压力和运价波动，但无直接指向墨西哥跨境包裹清关环节的具体新规。</li>
-        </ul>
-        <div class="card-section-label">行动建议</div>
-        <ul>
-          <li>无需立即行动；本分类将持续每日监控，一旦出现费率/时效变更将在下一期标红/标黄提示。</li>
+          <li>本分类当前没有在最近15天内首次发现的新信号，可能是本期未检索到相关更新，也可能是此前的信号已超过15天移入历史存档。</li>
         </ul>
       </div>
     </section>
@@ -352,24 +221,19 @@ footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg
     <section class="content-section" id="ml">
       <div class="section-title">🛒 ML官方数据/政策</div>
       <div class="section-subtitle">Mercado Libre/Mercado Pago 投资者关系 · 卖家政策中心</div>
-
+      
       <div class="card sig-green">
         <div class="card-head">
-          <div class="card-title">ℹ️ 本期未检索到Mercado Libre官方新披露的MX交易数据或重大政策变更公告</div>
+          <div class="card-title">ℹ️ 近15天内暂无「ML官方数据/政策」分类的新增信号</div>
           <span class="badge green">🟢 参考</span>
         </div>
         <div class="card-meta">
           <span class="badge tier">监控说明</span>
-          <span>持续监控中 · 2026-10-13</span>
+          <span>持续监控中</span>
         </div>
-        <div class="card-section-label">事实</div>
+        <div class="card-section-label">说明</div>
         <ul>
-          <li>MELI下一次季度财报（通常包含MX分部GMV等数据）预计在2026年11月前后发布，当前周期内暂无新披露。</li>
-          <li>卖家政策中心/Mercado Envíos费率页面本期未检索到新的公开变更说明。</li>
-        </ul>
-        <div class="card-section-label">行动建议</div>
-        <ul>
-          <li>无需立即行动；临近财报发布日期将重点抓取并在看板首页Top信号中提示。</li>
+          <li>本分类当前没有在最近15天内首次发现的新信号，可能是本期未检索到相关更新，也可能是此前的信号已超过15天移入历史存档。</li>
         </ul>
       </div>
     </section>
@@ -377,15 +241,15 @@ footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg
     <section class="content-section" id="platform">
       <div class="section-title">🔧 平台政策</div>
       <div class="section-subtitle">佣金/手续费 · 账户规则 · Fulfillment准入</div>
-
+      
       <div class="card sig-yellow">
         <div class="card-head">
           <div class="card-title">📊 ML México当前佣金结构：8%-20.5%，随类目与刊登方式(经典/优选)浮动</div>
           <span class="badge yellow">🟡 中</span>
         </div>
         <div class="card-meta">
-          <span class="badge tier">二级信源</span>
-          <span>卖家工具/行业博客汇总 · 2026</span>
+          <span class="badge tier">2级信源</span>
+          <span><a href="https://www.wivoanalytics.com/blog/cuanto-cobra-mercado-libre-por-venta-en-2025-guia-completa-de-comisiones-envios-y-mas" target="_blank" rel="noopener">卖家工具/行业博客汇总（Wivo Analytics）</a> · 2026-01</span>
         </div>
         <div class="card-section-label">事实</div>
         <ul>
@@ -395,7 +259,7 @@ footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg
         <div class="reason">评级理由：非突发变化，但叠加税务新规后实际到账比例显著下降，属于需要重新核算利润模型的结构性因素。</div>
         <div class="card-section-label">行动建议</div>
         <ul>
-          <li>按当前类目重新核算"佣金+税务代扣+物流/关税成本"后的真实净利率。</li>
+          <li>按当前类目重新核算&quot;佣金+税务代扣+物流/关税成本&quot;后的真实净利率。</li>
           <li>评估是否需要将部分SKU从优选刊登切换为经典刊登以降低综合费率。</li>
         </ul>
       </div>
@@ -403,16 +267,16 @@ footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg
 
     <section class="content-section" id="competition">
       <div class="section-title">📊 竞争与消费趋势</div>
-      <div class="section-subtitle">汇率 · 竞品动态 · 消费者行为</div>
-
+      <div class="section-subtitle">竞品动态 · 消费者行为（汇率见上方KPI区）</div>
+      
       <div class="card sig-yellow">
         <div class="card-head">
           <div class="card-title">🛍️ Shein/Temu/AliExpress终端售价因33.5%关税显著上涨，无FTA国家电商进口税收Q3同比增超50%</div>
           <span class="badge yellow">🟡 中</span>
         </div>
         <div class="card-meta">
-          <span class="badge tier">二级信源</span>
-          <span>Expansión/Récord/Excélsior等 · 2026-10</span>
+          <span class="badge tier">2级信源</span>
+          <span><a href="https://www.elimparcial.com/mexico/2026/10/08/cuanto-pagas-de-impuesto-al-comprar-en-shein-temu-o-aliexpress/" target="_blank" rel="noopener">El Imparcial</a> · 2026-10-08</span>
         </div>
         <div class="card-section-label">事实</div>
         <ul>
@@ -424,26 +288,6 @@ footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg
         <ul>
           <li>评估自身品类是否与Shein/Temu/AliExpress重叠，若是，可考虑阶段性强化ML店铺的价格可见度和广告投放。</li>
           <li>监控同品类在ML上的终端定价变化，避免跟涨过快流失转化率。</li>
-        </ul>
-      </div>
-
-      <div class="card sig-green">
-        <div class="card-head">
-          <div class="card-title">💱 美元兑比索汇率10月区间波动：17.97～18.29，整体维持相对强势</div>
-          <span class="badge green">🟢 参考</span>
-        </div>
-        <div class="card-meta">
-          <span class="badge tier">一级信源</span>
-          <span>Banco de México / DOF · 2026-10-01～2026-10-12</span>
-        </div>
-        <div class="card-section-label">事实</div>
-        <ul>
-          <li>10月1日：18.29；10月6日：17.97；10月12日：18.26（Banxico参考汇率）；DOF公布最近汇率约18.42。</li>
-          <li>比索自2023年以来整体维持相对强势，对以美元计价采购成本的卖家而言，汇率端压力暂属可控波动区间。</li>
-        </ul>
-        <div class="card-section-label">行动建议</div>
-        <ul>
-          <li>无需紧急调整；建议维持月度汇率敏感性检查，纳入采购定价模型的常规变量。</li>
         </ul>
       </div>
     </section>
@@ -472,11 +316,12 @@ footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg
       <p style="margin-top:12px; color: var(--text-secondary); font-size: 13px;">
         可信度分级：<b>一级</b> = 政府机关(.gob.mx)/ANAM/SAT/Banxico/INEGI/DOF/MELI官方；
         <b>二级</b> = 权威财经/行业媒体；<b>三级</b> = 社区/论坛/未核实信息（仅作舆情参考，不单独触发🔴评级）。
+        同一信源链接只会被采集和评估一次，不会重复生成卡片；每条卡片在首次发现15天后自动移入<a href="archive.html">历史存档</a>。
       </p>
     </section>
 
     <footer>
-      本看板由每日自动化流程生成：WebSearch/WebFetch采集公开信源 → 结构化汇总与业务影响评估（见 COMPILER_PROMPT.md） → 自动重新发布。
+      本看板由每日自动化流程生成：WebSearch/WebFetch采集公开信源 → 结构化汇总与业务影响评估（见 COMPILER_PROMPT.md） → 按信源链接去重 → 按15天新鲜度归档 → 自动重新发布。
       所有卡片均标注原始信源与日期，可追溯核实。本页不含任何专有/内部信息。
     </footer>
 

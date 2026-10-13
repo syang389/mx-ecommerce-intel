@@ -1,0 +1,187 @@
+[
+  {
+    "id": "url:dof.gob.mx/nota_detalle_popup.php",
+    "category": "reg",
+    "severity": "red",
+    "severity_reason": "直接且持续影响所有从中国等无FTA国家进口商品在MX销售的卖家的到岸成本结构，属于2026年全年核心变量。",
+    "title_zh": "🚨 对无自贸协定国家商品关税改革：最高50%，电商包裹统一税率33.5%",
+    "facts_zh": [
+      "2025年12月墨西哥国会批准关税改革，对与墨西哥无自贸协定的国家（包括中国、韩国、印度、印尼、土耳其、巴西等）超1400个税目产品征收最高50%关税，自2026年1月1日起生效。",
+      "通过简易清关程序（邮递/快递）进口、货值在2500美元以下的包裹，统一税率为33.5%（此前为19%）。",
+      "符合USMCA原产地证书的商品不受影响。"
+    ],
+    "source": {
+      "name": "Reglas Generales de Comercio Exterior 2026（DOF/SAT）",
+      "tier": 1,
+      "lang": "es",
+      "url": "https://dof.gob.mx/nota_detalle_popup.php?codigo=5777199",
+      "date": "2026-01-01"
+    },
+    "actions_zh": [
+      "核查所有SKU的原产地，确认是否可通过USMCA原产地证书豁免（如在美国/加拿大完成关键加工环节）。",
+      "重新核算2026年进口到岸成本模型，评估是否需要调整ML上的定价或切换供应链来源国。",
+      "与报关行确认当前货物适用税率的归类是否准确，避免因归类错误导致补税或罚款。"
+    ],
+    "first_seen": "2026-10-13",
+    "last_confirmed": "2026-10-13",
+    "status": "active"
+  },
+  {
+    "id": "url:www.sat.gob.mx/minisitio/normatividadrmfyrgce/documentos2026/rgce/rgce/reglasgeneralescomercioexteriorpara2026.pdf",
+    "category": "tax",
+    "severity": "red",
+    "severity_reason": "直接决定进口商品落地成本，且存在门槛进一步收紧的政策风险，需要持续跟踪。",
+    "title_zh": "💰 简易清关包裹综合税率33.5%持续执行，de minimis门槛（50美元以下免关税）维持但处于评估中",
+    "facts_zh": [
+      "墨西哥对国际小额包裹设定50美元的de minimis门槛：货值低于50美元可免征关税并适用简化申报，但不豁免16%的IVA。",
+      "简易清关程序下，货值2500美元以内的包裹统一税率由19%上调至33.5%，自2025年8月15日起实施并延续至2026年。",
+      "IVA计算公式为：(关税完税价格 + 进口关税 + DTA + 消费税(如适用)) × 16%。",
+      "多国已收紧或取消de minimis豁免以打击低报价格避税，墨西哥正在评估是否下调现有50美元门槛。"
+    ],
+    "source": {
+      "name": "SAT Reglas Generales de Comercio Exterior 2026",
+      "tier": 1,
+      "lang": "es",
+      "url": "https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rgce/rgce/ReglasGeneralesComercioExteriorpara2026.pdf",
+      "date": "2025-08-15"
+    },
+    "actions_zh": [
+      "核实当前供应链申报货值是否准确，避免因低报被认定为逃税而触发稽查风险。",
+      "将33.5%税率已纳入现有定价模型；一旦de minimis门槛下调，重新测算50美元以下小件商品的成本结构。"
+    ],
+    "first_seen": "2026-10-13",
+    "last_confirmed": "2026-10-13",
+    "status": "active"
+  },
+  {
+    "id": "url:www.anam.gob.mx/comunicado-de-prensa-92-2026",
+    "category": "customs",
+    "severity": "red",
+    "severity_reason": "有明确截止日期(11月1日)，一旦系统/流程未就位将直接影响清关放行时效，属于本周期最紧迫的合规动作。",
+    "title_zh": "🚨 电子价值声明(MVE)宽限期延至10月31日，11月1日起分阶段通过VUCEM强制执行",
+    "facts_zh": [
+      "SAT、ANAM与ATDT联合宣布，将电子价值声明(Manifestación Electrónica de Valor, MVE)的申报宽限期延长至2026年10月31日，以便外贸相关方完成系统调整。",
+      "自2026年11月1日起，MVE将按货物所适用的清关制度，通过外贸单一窗口(VUCEM/VUTCE)分阶段强制传输。",
+      "进口商须在清关前通过VUCEM电子传输完税价格及支持文件。",
+      "2026年海关法改革同时强化了报关行(agente aduanal)对完税价格准确性及税费缴纳的全责。"
+    ],
+    "source": {
+      "name": "ANAM 新闻公报92/2026",
+      "tier": 1,
+      "lang": "es",
+      "url": "https://www.anam.gob.mx/comunicado-de-prensa-92-2026/",
+      "date": "2026-10-10"
+    },
+    "actions_zh": [
+      "立即与报关行确认其VUCEM系统对接及MVE内部流程是否已完成测试。",
+      "在10月31日前完成至少一批次的MVE申报演练，排查数据字段缺口。",
+      "与报关行书面确认过渡期内若因系统问题导致清关延误或补税的责任划分。"
+    ],
+    "first_seen": "2026-10-13",
+    "last_confirmed": "2026-10-13",
+    "status": "active"
+  },
+  {
+    "id": "url:contarito.com.mx/blog/impuestos-mercadolibre-vendedores-mexico-2026",
+    "category": "tax",
+    "severity": "yellow",
+    "severity_reason": "直接压缩到账利润率，但属于已知、可提前测算的固定变化，非突发风险。",
+    "title_zh": "📉 数字平台代扣ISR税率由1%上调至2.5%（2026联邦收入法）",
+    "facts_zh": [
+      "2026年联邦收入法将通过数字平台销售商品的ISR代扣税率从1%上调至2.5%，自2026年1月1日起生效。",
+      "未注册RFC（税号）的卖家，代扣比例大幅提高至ISR 20% + IVA 16%。",
+      "代扣在每笔销售到账Mercado Pago前自动扣除，需要连同平台佣金（8%-20.5%不等）一并计入利润率测算。"
+    ],
+    "source": {
+      "name": "Ley de Ingresos de la Federación 2026（行业解读：Contarito）",
+      "tier": 2,
+      "lang": "es",
+      "url": "https://contarito.com.mx/blog/impuestos-mercadolibre-vendedores-mexico-2026/",
+      "date": "2026-01-01"
+    },
+    "actions_zh": [
+      "核对近期Mercado Pago结算单，确认实际扣缴比例与2.5%一致。",
+      "若尚未完成RFC注册，尽快补齐，避免适用20%+16%的高档代扣。",
+      "将新税率更新进利润率测算表，重新评估各SKU定价空间。"
+    ],
+    "first_seen": "2026-10-13",
+    "last_confirmed": "2026-10-13",
+    "status": "active"
+  },
+  {
+    "id": "url:vinculum.mx/2026/03/31/pnic-2026-nuevas-reglas-para-etiquetado-y-cumplimiento",
+    "category": "customs",
+    "severity": "yellow",
+    "severity_reason": "对服装/电子/食品等常见跨境品类有实质合规门槛，但执行力度和时间表尚不完全明确，需持续跟踪细则落地。",
+    "title_zh": "🏷️ PNIC 2026新增电商专项NOM，要求线上商品与实体店同等合规；NOM-051/004/024同步更新",
+    "facts_zh": [
+      "2026年国家产业与竞争力计划(PNIC 2026)新增专门针对电商平台商品的监管规则，要求线上销售商品与实体店商品遵循同等合规标准。",
+      "NOM-051-SCFI（预包装食品警示标签）更新了营养标准；NOM-004-SE（纺织品标签）新增可持续性要求；NOM-024-SCFI（电子产品）强化能效标注要求。",
+      "不满足相关NOM标签/认证要求的商品可能被海关扣押、无法完成清关放行。"
+    ],
+    "source": {
+      "name": "PNIC 2026 解读（Vinculum）",
+      "tier": 2,
+      "lang": "es",
+      "url": "https://vinculum.mx/2026/03/31/pnic-2026-nuevas-reglas-para-etiquetado-y-cumplimiento/",
+      "date": "2026-03-31"
+    },
+    "actions_zh": [
+      "逐SKU核对所属品类对应的NOM标签要求（尤其纺织品、电子、食品/个护类目）。",
+      "要求上游供应商在发货前补齐西语标签及认证文件，避免到港后补救。"
+    ],
+    "first_seen": "2026-10-13",
+    "last_confirmed": "2026-10-13",
+    "status": "active"
+  },
+  {
+    "id": "url:www.wivoanalytics.com/blog/cuanto-cobra-mercado-libre-por-venta-en-2025-guia-completa-de-comisiones-envios-y-mas",
+    "category": "platform",
+    "severity": "yellow",
+    "severity_reason": "非突发变化，但叠加税务新规后实际到账比例显著下降，属于需要重新核算利润模型的结构性因素。",
+    "title_zh": "📊 ML México当前佣金结构：8%-20.5%，随类目与刊登方式(经典/优选)浮动",
+    "facts_zh": [
+      "经典刊登(Publicación Clásica)佣金约10%-15%，优选刊登(Publicación Premium)约14.5%-19.5%，整体区间8%-20.5%，按商品类目不同而浮动。",
+      "佣金与前述2.5% ISR代扣、16% IVA代扣（未注册RFC时）均在结算时自动扣除，需合并计算实际到账比例。"
+    ],
+    "source": {
+      "name": "卖家工具/行业博客汇总（Wivo Analytics）",
+      "tier": 2,
+      "lang": "es",
+      "url": "https://www.wivoanalytics.com/blog/cuanto-cobra-mercado-libre-por-venta-en-2025-guia-completa-de-comisiones-envios-y-mas",
+      "date": "2026-01"
+    },
+    "actions_zh": [
+      "按当前类目重新核算\"佣金+税务代扣+物流/关税成本\"后的真实净利率。",
+      "评估是否需要将部分SKU从优选刊登切换为经典刊登以降低综合费率。"
+    ],
+    "first_seen": "2026-10-13",
+    "last_confirmed": "2026-10-13",
+    "status": "active"
+  },
+  {
+    "id": "url:www.elimparcial.com/mexico/2026/10/08/cuanto-pagas-de-impuesto-al-comprar-en-shein-temu-o-aliexpress",
+    "category": "competition",
+    "severity": "yellow",
+    "severity_reason": "终端提价可能削弱中国系跨境平台的价格优势，为ML本地/跨境卖家带来阶段性承接消费需求的机会，但也可能带来整体品类价格上涨压力。",
+    "title_zh": "🛍️ Shein/Temu/AliExpress终端售价因33.5%关税显著上涨，无FTA国家电商进口税收Q3同比增超50%",
+    "facts_zh": [
+      "此前售价1000比索的商品，加征33.5%关税后终端售价升至约1335比索，Shein/Temu/AliExpress普遍提价。",
+      "财政部/SAT表示政策目标是打击低报价格逃税及违规快递操作；2025年Q3无自贸协定国家电商进口相关税收同比增长超50%。"
+    ],
+    "source": {
+      "name": "El Imparcial",
+      "tier": 2,
+      "lang": "es",
+      "url": "https://www.elimparcial.com/mexico/2026/10/08/cuanto-pagas-de-impuesto-al-comprar-en-shein-temu-o-aliexpress/",
+      "date": "2026-10-08"
+    },
+    "actions_zh": [
+      "评估自身品类是否与Shein/Temu/AliExpress重叠，若是，可考虑阶段性强化ML店铺的价格可见度和广告投放。",
+      "监控同品类在ML上的终端定价变化，避免跟涨过快流失转化率。"
+    ],
+    "first_seen": "2026-10-13",
+    "last_confirmed": "2026-10-13",
+    "status": "active"
+  }
+]
