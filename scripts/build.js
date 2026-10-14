@@ -9,6 +9,7 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(ROOT, 'data');
 const SITE_DIR = path.join(ROOT, 'site');
+const TEMPLATES_DIR = path.join(ROOT, 'templates');
 
 const ALERTS_PATH = path.join(DATA_DIR, 'alerts.json');
 const INCOMING_PATH = path.join(DATA_DIR, 'incoming.json');
@@ -237,7 +238,7 @@ function main() {
     else kpiGreen++;
   }
 
-  let template = fs.readFileSync(path.join(SITE_DIR, 'template.html'), 'utf8');
+  let template = fs.readFileSync(path.join(TEMPLATES_DIR, 'index.template.html'), 'utf8');
 
   const replacements = {
     UPDATED_DATE: meta.updated_date,
@@ -269,7 +270,7 @@ function main() {
   fs.writeFileSync(path.join(SITE_DIR, 'index.html'), template, 'utf8');
 
   // archive.html
-  let archiveTemplate = fs.readFileSync(path.join(SITE_DIR, 'archive_template.html'), 'utf8');
+  let archiveTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'archive.template.html'), 'utf8');
   let archiveGroupsHtml = '';
   if (archived.length === 0) {
     archiveGroupsHtml = '<p class="empty-note">暂无历史存档内容——所有已知信号都在最近15天新鲜度窗口内。</p>';
