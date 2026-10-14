@@ -36,6 +36,24 @@ function readJson(p, fallback) {
   }
 }
 
+// 与 readJson 不同：文件缺失时返回 fallback（正常情况），但文件存在却解析失败时直接抛错——
+// 之前 incoming.json 里嵌入了未转义的中文直引号("...")导致 JSON.parse 失败，被 readJson 悄悄
+// 吞掉退回 []，表现成"今天没有新信源"，排查了很久才发现。坏 JSON 必须让脚本炸掉，不能静默吞掉。
+function readJsonStrict(p, fallback) {
+  let raw;
+  try {
+    raw = fs.readFileSync(p, 'utf8');
+  } catch (e) {
+    if (e.code === 'ENOENT') return fallback;
+    throw e;
+  }
+  try {
+    return JSON.parse(raw);
+  } catch (e) {
+    throw new Error(`${p} 不是合法 JSON（可能是中文文本里混用了直引号" "而没有转义）：${e.message}`);
+  }
+}
+
 function writeJson(p, obj) {
   fs.writeFileSync(p, JSON.stringify(obj, null, 2) + '\n', 'utf8');
 }
@@ -206,8 +224,8 @@ function main() {
   const today = todayUTC();
 
   let alerts = readJson(ALERTS_PATH, []);
-  const incoming = readJson(INCOMING_PATH, []);
-  const metaIn = readJson(META_IN_PATH, {});
+  const incoming = readJsonStrict(INCOMING_PATH, []);
+  const metaIn = readJsonStrict(META_IN_PATH, {});
   const prevMeta = readJson(META_PATH, { version: '1.0', usd_mxn: '-', usd_mxn_date: '-', top_summary_zh: '' });
 
   const { addedCount, skippedCount } = mergeIncoming(alerts, incoming, today);

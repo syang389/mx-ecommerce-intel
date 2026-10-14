@@ -82,6 +82,32 @@
     "status": "active"
   },
   {
+    "id": "url:www.gob.mx/se/prensa/la-se-y-la-anam-orientan-sobre-la-derogacion-del-anexo-4-de-la-resolucion-de-precios-en-operaciones-mediante-pedimentos-consolidados",
+    "category": "customs",
+    "severity": "yellow",
+    "severity_reason": "直接改变纺织品/服装类商品的进口合规要求（取消自动进口许可），且涉及已在途/跨越生效日的合并清关(pedimentos consolidados)货物如何适用新旧规则，需要相关品类卖家与报关行立即核对在途货物的归类。",
+    "title_zh": "🏷️ SE与ANAM联合说明：纺织品“价格决议附件4”自动进口许可已取消，明确合并清关过渡期规则",
+    "facts_zh": [
+      "2026年9月14日公报废除《价格决议附件4》(Anexo 4 de la Resolución de Precios)，自2026年9月15日起，单价低于预估价格的纺织品/服装类商品进口不再需要申请自动进口许可。",
+      "2026年10月5日，SE与ANAM联合发布说明(ANAM通稿93/2026)，明确通过合并清关程序(pedimentos consolidados，即多批次货物合并为一份清关单)的操作规则：若首批货物发生在9月15日之前，可按《海关法》第37/37-A条、以首批货物的进口日期为准适用监管要求，即使后续批次或正式结关发生在新规生效之后。",
+      "该说明主要影响纺织品、服装类跨境商品的清关合规判断。"
+    ],
+    "source": {
+      "name": "Secretaría de Economía 新闻archive（联合ANAM通稿93/2026）",
+      "tier": 1,
+      "lang": "es",
+      "url": "https://www.gob.mx/se/prensa/la-se-y-la-anam-orientan-sobre-la-derogacion-del-anexo-4-de-la-resolucion-de-precios-en-operaciones-mediante-pedimentos-consolidados",
+      "date": "2026-10-05"
+    },
+    "actions_zh": [
+      "核查近期/在途的纺织品/服装类进口货物是否使用合并清关(pedimentos consolidados)，确认首批货物的进口日期以判断适用新规则还是过渡期规则。",
+      "与报关行确认：9月15日之后的新批次纺织品进口是否已按“无需自动进口许可”简化处理，避免因沿用旧流程多走审批环节。"
+    ],
+    "first_seen": "2026-10-14",
+    "last_confirmed": "2026-10-14",
+    "status": "active"
+  },
+  {
     "id": "url:contarito.com.mx/blog/impuestos-mercadolibre-vendedores-mexico-2026",
     "category": "tax",
     "severity": "yellow",
@@ -182,6 +208,32 @@
     ],
     "first_seen": "2026-10-13",
     "last_confirmed": "2026-10-13",
+    "status": "active"
+  },
+  {
+    "id": "url:www.gob.mx/se/prensa/se-prorroga-aplicabilidad-del-permiso-previo-de-importacion-de-azucar-y-preparaciones-alimenticias",
+    "category": "customs",
+    "severity": "green",
+    "severity_reason": "仅影响含糖食品/预制品(关税细目2106.90.99等)这一特定品类，且是过渡期延长（对卖家是利好/缓冲），不涉及紧急合规风险。",
+    "title_zh": "🍬 含糖食品进口“事前许可”过渡期延长至11月2日，涉及关税细目2106.90.99等",
+    "facts_zh": [
+      "2026年5月28日公报设立含糖食品及制品(税则2106.90.99、1701.12.05等多个细目)进口事前许可(Permiso Previo de Importación)要求，自2026年9月28日起对多数相关细目生效。",
+      "针对税则细目2106.90.99（含糖预制食品），SE于2026年10月2日宣布过渡期延长至2026年11月2日：在此之前，相关货物可通过申报适用豁免标识的方式清关，暂不强制要求取得该许可。",
+      "该过渡期延长目的是给进口商更多时间完成许可申请流程，避免影响正常贸易。"
+    ],
+    "source": {
+      "name": "Secretaría de Economía 新闻archive",
+      "tier": 1,
+      "lang": "es",
+      "url": "https://www.gob.mx/se/prensa/se-prorroga-aplicabilidad-del-permiso-previo-de-importacion-de-azucar-y-preparaciones-alimenticias",
+      "date": "2026-10-02"
+    },
+    "actions_zh": [
+      "如经营含糖食品/饮料预制品类目(如税则2106.90.99)，在11月2日前完成“事前许可”申请，避免过渡期结束后清关受阻。",
+      "与供应商/报关行确认具体进口商品的关税细目是否落在本次许可要求范围内。"
+    ],
+    "first_seen": "2026-10-14",
+    "last_confirmed": "2026-10-14",
     "status": "active"
   }
 ]
