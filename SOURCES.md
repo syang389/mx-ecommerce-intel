@@ -105,8 +105,14 @@
 
 ## 7. 竞争与消费趋势
 
+**A层（汇率，每日必抓，已验证可用，无需WebSearch）：**
+- **USD/MXN 汇率 JSON API** https://open.er-api.com/v6/latest/USD （免费、无需key、每日更新一次。
+  字段：`rates.MXN` 为汇率数值，`time_last_update_utc` 为更新时间。这是看板首屏KPI区"USD/MXN"
+  数字的信源，不是信号卡片，不走去重/归档逻辑——每天直接用当天抓到的值覆盖 `data/meta_in.json`
+  里的 `usd_mxn`/`usd_mxn_date` 即可。优先于 Banxico 官网页面，因为是结构化JSON、无需解析网页。）
+
 **B层：**
-- Banco de México 汇率（USD/MXN参考价，持续更新，非"信号卡片"而是KPI数字） https://www.banxico.org.mx/tipcamb/tipCamMIAction.do?idioma=es
+- Banco de México 汇率页（备用/交叉核对） https://www.banxico.org.mx/tipcamb/tipCamMIAction.do?idioma=es
 - INEGI 零售/电商统计 https://www.inegi.org.mx/
 - 关键词：`Shein Temu AliExpress México arancel precio`, `Amazon México Coppel competencia`, `ecommerce México crecimiento`
 

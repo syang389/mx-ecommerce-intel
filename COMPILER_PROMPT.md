@@ -98,6 +98,10 @@
 直接说明"发生了什么 + 最需要做什么"），写入 `data/meta_in.json` 的 `top_summary_zh` 字段，
 用于看板首屏 KPI 区下方的摘要框。
 
+`usd_mxn`/`usd_mxn_date` 字段**每次运行都必须更新**（不像卡片那样允许"今天没有新内容"）：直接
+WebFetch `https://open.er-api.com/v6/latest/USD`，取 `rates.MXN` 和 `time_last_update_utc`，
+写入这两个字段。这是结构化 JSON API、免费、每日更新，不需要 WebSearch 猜测或等待媒体报道汇率。
+
 ## 红线
 
 - 不得编造信源、链接或日期；无法核实的内容不得标注为一级信源。
