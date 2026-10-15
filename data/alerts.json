@@ -82,6 +82,62 @@
     "status": "active"
   },
   {
+    "id": "url:www.garrigues.com/es_es/noticia/mexico-adopcion-obligatoria-manifestacion-valor-electronica-aplaza-entrara-vigor-cada",
+    "category": "customs",
+    "severity": "yellow",
+    "severity_reason": "细化了此前已知的MVE（电子价值声明）10月31日宽限期后续安排，明确不同清关制度的具体强制起始日期；多数跨境电商卖家适用的“最终进口”制度窗口期较长（至2027年1月15日），紧迫性中等但需提前核对自身适用的制度类别。",
+    "title_zh": "⚖️ MVE强制执行时间表细化：按清关制度分四档，11月起陆续生效至2027年1月",
+    "facts_zh": [
+      "西班牙Garrigues律师事务所（2026-10-06文章）披露SAT已发布2026年《外贸一般规则》(RGCE)第三次修改预案，确认VUCEM电子传输**价值声明(MVE)**在2026年10月31日前仍为自愿性质。",
+      "自2026年11月1日起，保税仓加工/改装/维修类商品（régimen de elaboración, transformación o reparación en recinto fiscalizado）须强制通过VUCEM传输MVE。",
+      "过境货物（tránsito）自2026年12月1日起强制；暂时进口（importación temporal）自2027年1月1日起强制；绝大多数跨境电商卖家适用的**最终/定义进口（importación definitiva）**则从2027年1月15日起强制执行。",
+      "该期限此前已多次延期（曾定为2025年12月9日，后延至2026年6月1日），此次为Garrigues披露的最新版本，建议以SAT/VUCEM官方公告最终确认为准。"
+    ],
+    "source": {
+      "name": "Garrigues（法律事务所解读）",
+      "tier": 2,
+      "lang": "es",
+      "url": "https://www.garrigues.com/es_ES/noticia/mexico-adopcion-obligatoria-manifestacion-valor-electronica-aplaza-entrara-vigor-cada",
+      "date": "2026-10-06"
+    },
+    "actions_zh": [
+      "确认公司进口货物主要适用哪种清关制度（多数ML跨境卖家为最终进口），据此核对真实的强制起始日期，不要一概按11月1日准备 — 清关/合规负责人 — 1周内",
+      "即便最终进口的强制期限在2027年1月15日，仍建议尽早与报关行确认VUCEM系统对接计划，避免临期赶工 — 报关行协调 — 2周内",
+      "鉴于该期限历史上多次延期，建议订阅SAT/ANAM官方公告作为最终依据，不单独依赖本次律所解读 — 持续"
+    ],
+    "first_seen": "2026-10-15",
+    "last_confirmed": "2026-10-15",
+    "status": "active"
+  },
+  {
+    "id": "url:www.xataka.com.mx/comercio-electronico/mercado-libre-aumentara-costos-ofrecer-envios-gratis-a-partir-17-octubre-mexico",
+    "category": "platform",
+    "severity": "yellow",
+    "severity_reason": "平台包邮附加费上调直接影响卖家单均物流成本，生效日期临近（2026年10月17日，即2天后），需尽快核对定价和信誉等级对应折扣，但上调幅度（约3.5%）属渐进式调整而非剧烈冲击，故评为黄色而非红色。",
+    "title_zh": "🛒 Mercado Libre墨西哥10月17日起上调“提供免费配送”附加费(约3.5%)，差信誉卖家折扣更低",
+    "facts_zh": [
+      "Xataka México报道，Mercado Libre已通知墨西哥卖家，自2026年10月17日起上调向卖家收取的“提供免费配送”附加费率，平台将原因归因于物流承运商方面提出的调价要求，涨幅约3.5%。",
+      "折扣仍按卖家信誉等级分级：新品定价低于499比索时，绿色信誉/MercadoLíderes/官方旗舰店可享30%折扣；黄色或灰色信誉等级卖家仅享20%折扣，受此次涨价影响更明显。",
+      "文中给出1公斤以内包裹上调前基础费率示例约114比索，具体新费率表及各重量段细则未在本次检索内容中完整披露，需以卖家后台官方通知/费率表为准。",
+      "检索内容未能确认该文章的具体发表日期，但其所述生效日期（2026年10月17日）在原文中明确标注。"
+    ],
+    "source": {
+      "name": "Xataka México",
+      "tier": 2,
+      "lang": "es",
+      "url": "https://www.xataka.com.mx/comercio-electronico/mercado-libre-aumentara-costos-ofrecer-envios-gratis-a-partir-17-octubre-mexico",
+      "date": "未注明（原文生效日期为2026-10-17）"
+    },
+    "actions_zh": [
+      "登录卖家后台核实本账号信誉等级及实际新费率通知，不要仅依赖媒体报道的示例费率 — 店铺负责人 — 10月17日生效前完成",
+      "按新附加费率重新测算包邮SKU的单均物流成本和毛利率，评估是否需要微调定价或调整包邮门槛 — 运营/定价负责人 — 本周内",
+      "信誉等级为黄色/灰色的卖家应优先核查是否有改善信誉评分的空间，以争取更高折扣档位 — 店铺负责人 — 持续"
+    ],
+    "first_seen": "2026-10-15",
+    "last_confirmed": "2026-10-15",
+    "status": "active"
+  },
+  {
     "id": "url:www.gob.mx/se/prensa/la-se-y-la-anam-orientan-sobre-la-derogacion-del-anexo-4-de-la-resolucion-de-precios-en-operaciones-mediante-pedimentos-consolidados",
     "category": "customs",
     "severity": "yellow",
@@ -208,6 +264,32 @@
     ],
     "first_seen": "2026-10-13",
     "last_confirmed": "2026-10-13",
+    "status": "active"
+  },
+  {
+    "id": "url:expansion.mx/empresas/2026/10/07/correos-demexico-compite-dhl-estafeta-precios-tiemposentrega",
+    "category": "logistics",
+    "severity": "green",
+    "severity_reason": "仅为Profeco单一路线/单一重量的运费比价信息，不涉及关税或合规变化，对运营连续性影响有限，作为末端配送选型参考。",
+    "title_zh": "📦 Profeco十月比价：墨西哥邮政(Mexpost)运费最低且时效可比DHL",
+    "facts_zh": [
+      "Expansión(2026-10-07)援引Profeco《消费者杂志》10月刊比价：CDMX寄往杜兰戈州Gómez Palacio的5公斤(50×40×30cm)包裹，墨西哥邮政Mexpost报价359比索/3个自然日。",
+      "同路线同重量下，Estafeta报价603.36比索/5个自然日；DHL报价1038.96比索/3个自然日，是三者中最贵的选项。",
+      "Mexpost价格比DHL低约680比索，但时效与DHL相同（均为3天），优于Estafeta（5天）。",
+      "该对比仅为单一路线单一重量样本，不代表全国通用费率，不同路线/重量/时段结果可能不同。"
+    ],
+    "source": {
+      "name": "Expansión（援引Profeco）",
+      "tier": 2,
+      "lang": "es",
+      "url": "https://expansion.mx/empresas/2026/10/07/correos-demexico-compite-dhl-estafeta-precios-tiemposentrega",
+      "date": "2026-10-07"
+    },
+    "actions_zh": [
+      "若主要出货路线与该测试路线相近（跨州中长途、中小件），可抽样测试墨西哥邮政Mexpost作为DHL/Estafeta的补充选项以降低末端配送成本 — 物流/运营负责人 — 下次比价/询价时测试"
+    ],
+    "first_seen": "2026-10-15",
+    "last_confirmed": "2026-10-15",
     "status": "active"
   },
   {
