@@ -82,6 +82,34 @@
     "status": "active"
   },
   {
+    "id": "url:www.jornada.com.mx/2026/10/17/economia/016n1eco",
+    "category": "competition",
+    "severity": "yellow",
+    "severity_reason": "比索兑美元连续走弱并触及近11个月高位，直接推高以美元结算进口成本；属渐进式汇率波动而非单次冲击，且美联储年底决议结果未定，故评为黄色、需提前准备而非立即预警。",
+    "title_zh": "📊 比索连续六周走弱，美元/比索触及18.60（近11个月高位），美联储年底加息预期是主因",
+    "facts_zh": [
+      "《La Jornada》(2026-10-17)报道，墨西哥比索兑美元已连续六周走弱，本周一度触及18.60比索/美元，为2025年11月以来最高水平。",
+      "报道将本轮走弱归因于市场预期美联储可能在年底前再度加息，缩小了此前支撑比索的美墨利差。",
+      "据多家汇率信息源交叉比对，当日（2026-10-17）墨西哥银行(Banxico)上一交易日(10-16)官方收盘参考价为18.5045比索/美元，FIX/中间价参考约18.47，银行现钞卖出价约18.55。",
+      "本次因沙箱网络出口限制，open.er-api.com等结构化汇率API与官方页面均无法直接WebFetch，以上数据依据WebSearch摘要交叉整理，非直接抓取官方页面原文。"
+    ],
+    "source": {
+      "name": "La Jornada（综合汇率行情，交叉比对Banxico/NNC/Investing.com引用数据）",
+      "tier": 2,
+      "lang": "es",
+      "url": "https://www.jornada.com.mx/2026/10/17/economia/016n1eco",
+      "date": "2026-10-17"
+    },
+    "actions_zh": [
+      "对以美元计价的进口采购合同，评估是否需要锁汇或签订远期购汇以降低近期汇率波动风险 — 财务/采购负责人 — 1周内",
+      "重新核算当前SKU定价是否已覆盖18.5以上区间的采购成本，避免汇率上行侵蚀毛利 — 定价/运营负责人 — 本周内",
+      "持续关注美联储年底议息会议结果及Banxico后续动作，提前做好成本模型的汇率敏感性测试 — 财务负责人 — 持续"
+    ],
+    "first_seen": "2026-10-17",
+    "last_confirmed": "2026-10-17",
+    "status": "active"
+  },
+  {
     "id": "url:www.garrigues.com/es_es/noticia/mexico-adopcion-obligatoria-manifestacion-valor-electronica-aplaza-entrara-vigor-cada",
     "category": "customs",
     "severity": "yellow",
