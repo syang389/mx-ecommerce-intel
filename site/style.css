@@ -55,6 +55,7 @@ img { max-width: 100%; }
   border-left: 3px solid transparent;
 }
 .sidebar-item:hover { color: var(--navy); background: var(--bg-card-hover); text-decoration: none; }
+.sidebar-item.active { color: var(--navy); background: var(--accent-bg); border-left-color: var(--navy); font-weight: 600; }
 .sidebar-item.sig-red .dot { background: var(--signal-red); }
 .sidebar-item.sig-yellow .dot { background: var(--signal-yellow); }
 .sidebar-item.sig-green .dot { background: var(--signal-green); }

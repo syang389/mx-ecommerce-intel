@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>INEGI外贸统计 | MX跨境电商情报看板 | {{UPDATED_DATE}} | v{{VERSION}}</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <button class="menu-toggle pill" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰ 分类</button>
+  <div class="navbar-brand"><span class="flag">🇲🇽</span>MX跨境电商情报看板</div>
+  <div class="navbar-meta">
+    <span>更新至 {{UPDATED_DATE}}</span>
+    <span>v{{VERSION}}</span>
+    <span>服务对象：ML México 跨境卖家决策者</span>
+  </div>
+  <div class="navbar-controls">
+    <a class="pill" href="index.html">← 返回今日Top信号</a>
+    <a class="pill" href="archive.html">历史存档</a>
+  </div>
+</nav>
+
+<div class="layout">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li class="sidebar-section-title">总览</li>
+      <li><a class="sidebar-item" href="index.html#top">今日Top信号</a></li>
+
+      <li class="sidebar-section-title" style="margin-top:12px;">七大分类（近15天）</li>
+      <li><a class="sidebar-item sig-{{DOT_REG}}" href="index.html#reg"><span class="dot"></span>监管动态<span class="count-badge">{{COUNT_REG}}</span></a></li>
+      <li><a class="sidebar-item sig-{{DOT_TAX}}" href="index.html#tax"><span class="dot"></span>税务<span class="count-badge">{{COUNT_TAX}}</span></a></li>
+      <li><a class="sidebar-item sig-{{DOT_CUSTOMS}}" href="index.html#customs"><span class="dot"></span>清关/海关<span class="count-badge">{{COUNT_CUSTOMS}}</span></a></li>
+      <li><a class="sidebar-item sig-{{DOT_LOGISTICS}}" href="index.html#logistics"><span class="dot"></span>物流<span class="count-badge">{{COUNT_LOGISTICS}}</span></a></li>
+      <li><a class="sidebar-item sig-{{DOT_ML}}" href="index.html#ml"><span class="dot"></span>ML官方数据/政策<span class="count-badge">{{COUNT_ML}}</span></a></li>
+      <li><a class="sidebar-item sig-{{DOT_PLATFORM}}" href="index.html#platform"><span class="dot"></span>平台政策<span class="count-badge">{{COUNT_PLATFORM}}</span></a></li>
+      <li><a class="sidebar-item sig-{{DOT_COMPETITION}}" href="index.html#competition"><span class="dot"></span>竞争与消费趋势<span class="count-badge">{{COUNT_COMPETITION}}</span></a></li>
+
+      <li class="sidebar-section-title" style="margin-top:12px;">官方统计专题</li>
+      <li><a class="sidebar-item active" href="inegi.html">📊 INEGI外贸统计</a></li>
+
+      <li class="sidebar-section-title" style="margin-top:12px;">方法论</li>
+      <li><a class="sidebar-item" href="index.html#sources">数据源监控清单</a></li>
+      <li><a class="sidebar-item" href="archive.html">历史存档（15天以上）</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <section class="content-section" id="inegi">
+      {{INEGI_SECTION}}
+    </section>
+  </main>
+</div>
+
+</body>
+</html>

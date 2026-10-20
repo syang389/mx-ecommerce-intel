@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>MX跨境电商情报看板 | 2026-10-20 | v2.3</title>
+<title>MX跨境电商情报看板 | 2026-10-20 | v2.4</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -14,10 +14,11 @@
   <div class="navbar-brand"><span class="flag">🇲🇽</span>MX跨境电商情报看板</div>
   <div class="navbar-meta">
     <span>更新至 2026-10-20</span>
-    <span>v2.3</span>
+    <span>v2.4</span>
     <span>服务对象：ML México 跨境卖家决策者</span>
   </div>
   <div class="navbar-controls">
+    <a class="pill" href="inegi.html">📊 INEGI外贸统计</a>
     <a class="pill" href="archive.html">历史存档</a>
     <span class="pill">下次更新：每日自动</span>
   </div>
@@ -39,7 +40,7 @@
       <li><a class="sidebar-item sig-yellow" href="#competition"><span class="dot"></span>竞争与消费趋势<span class="count-badge">2</span></a></li>
 
       <li class="sidebar-section-title" style="margin-top:12px;">官方统计专题</li>
-      <li><a class="sidebar-item" href="#inegi">📊 INEGI外贸统计</a></li>
+      <li><a class="sidebar-item" href="inegi.html">📊 INEGI外贸统计</a></li>
 
       <li class="sidebar-section-title" style="margin-top:12px;">方法论</li>
       <li><a class="sidebar-item" href="#sources">数据源监控清单</a></li>
@@ -59,7 +60,7 @@
         <div class="kpi-card green"><div class="kpi-value">2</div><div class="kpi-label">🟢 仅供参考</div></div>
         <div class="kpi-card"><div class="kpi-value">18.50</div><div class="kpi-label">USD/MXN（2026-10-17参考价）</div></div>
         
-        <a href="#inegi" class="kpi-card-link">
+        <a href="inegi.html" class="kpi-card-link">
           <div class="kpi-card">
             <div class="kpi-value"><span class="pct-pos">+34.2%</span></div>
             <div class="kpi-label">INEGI进口总额同比（2026年8月初步值）</div>
@@ -431,130 +432,6 @@
       </div>
     </section>
 
-    <section class="content-section" id="inegi">
-      
-      <div class="section-title">📊 INEGI 墨西哥对外贸易统计</div>
-      <div class="section-subtitle">月度商品贸易差额(BCMM)，专题区域——与上方七大分类的🔴🟡🟢信号卡片体系分开展示，本区域为统计数据而非事件信号</div>
-      
-      <div class="top-signal-box" style="margin-bottom:var(--spacing-lg);">
-        <h3>数据时效说明</h3>
-        <p>
-          数据期间：<b>2026年8月</b>（初步数据 cifras oportunas，后续可能修订）
-          · INEGI公报发布日期：<b>2026-09-28</b>（公报607/26号）
-          · 看板最近核查日期：<b>2026-10-20</b>
-          · INEGI下次发布预计：<b>2026-10-27</b>
-        </p>
-      </div>
-      
-      <div class="kpi-grid" style="margin-bottom:var(--spacing-lg);">
-        <div class="kpi-card"><div class="kpi-value">78,011</div><div class="kpi-label">出口总额 mdd（<span class="pct-pos">+40.4%</span> 同比）</div></div>
-        <div class="kpi-card"><div class="kpi-value">77,405</div><div class="kpi-label">进口总额 mdd（<span class="pct-pos">+34.2%</span> 同比）</div></div>
-        <div class="kpi-card"><div class="kpi-value">605</div><div class="kpi-label">贸易差额 mdd（顺差）</div></div>
-      </div>
-      <div class="card-section-label">月度出口/进口趋势（mdd，仅月度颗粒度点）</div>
-      <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
-        
-    <svg class="sparkline" viewBox="0 0 560 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="月度出口/进口趋势">
-      <path d="M28.0,87.3 L280.0,33.2 L532.0,53.9" class="spark-line spark-export"/>
-      <path d="M28.0,112.0 L280.0,28.0 L532.0,57.6" class="spark-line spark-import"/>
-      <circle cx="28.0" cy="87.3" r="3" class="spark-export"/><circle cx="280.0" cy="33.2" r="3" class="spark-export"/><circle cx="532.0" cy="53.9" r="3" class="spark-export"/>
-      <circle cx="28.0" cy="112.0" r="3" class="spark-import"/><circle cx="280.0" cy="28.0" r="3" class="spark-import"/><circle cx="532.0" cy="57.6" r="3" class="spark-import"/>
-      <text x="28.0" y="134" class="spark-label" text-anchor="middle">2026年6月</text><text x="280.0" y="134" class="spark-label" text-anchor="middle">2026年7月</text><text x="532.0" y="134" class="spark-label" text-anchor="middle">2026年8月</text>
-    </svg>
-    <div class="spark-legend">
-      <span><span class="dot-legend spark-export"></span>出口总额 (mdd)</span>
-      <span><span class="dot-legend spark-import"></span>进口总额 (mdd)</span>
-    </div>
-      </div>
-      <p style="color:var(--text-secondary); font-size:13px; margin-bottom:var(--spacing-md);">历史年度参考：2024年全年 出口617,771mdd / 进口636,218mdd；2025年全年 出口664,267mdd / 进口664,057mdd</p>
-      
-      <div class="card-section-label">贸易差额构成明细（Cuadro 1，原始数据）</div>
-      <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
-        <table>
-          <thead><tr><th>分类</th><th>2026年8月 (mdd)</th><th>同比</th><th>2026年1-8月累计 (mdd)</th><th>同比</th></tr></thead>
-          <tbody>
-            <tr><td>出口总额</td><td>78,010.5</td><td><span class="pct-pos">+40.4%</span></td><td>549,397.6</td><td><span class="pct-pos">+29.3%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　石油类</td><td>1,581.6</td><td><span class="pct-neg">-2.8%</span></td><td>14,547.9</td><td><span class="pct-neg">-1.3%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　非石油类</td><td>76,428.9</td><td><span class="pct-pos">+41.7%</span></td><td>534,849.7</td><td><span class="pct-pos">+30.4%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　　农牧渔产品</td><td>1,154.5</td><td><span class="pct-neg">-1.6%</span></td><td>14,354.9</td><td><span class="pct-neg">-2.9%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　　采掘业产品</td><td>1,655.9</td><td><span class="pct-pos">+45.9%</span></td><td>14,671.0</td><td><span class="pct-pos">+75.1%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　　制造业产品</td><td>73,618.5</td><td><span class="pct-pos">+42.6%</span></td><td>505,823.8</td><td><span class="pct-pos">+30.8%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　　　汽车类</td><td>15,926.4</td><td><span class="pct-neg">-2.2%</span></td><td>125,524.5</td><td><span class="pct-pos">+0.8%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　　　非汽车类</td><td>57,692.1</td><td><span class="pct-pos">+63.2%</span></td><td>380,299.2</td><td><span class="pct-pos">+45.0%</span></td></tr>
-            <tr><td>进口总额</td><td>77,405.1</td><td><span class="pct-pos">+34.2%</span></td><td>539,537.3</td><td><span class="pct-pos">+26.8%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　石油类</td><td>5,023.0</td><td><span class="pct-pos">+29.6%</span></td><td>36,878.0</td><td><span class="pct-pos">+18.0%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　非石油类</td><td>72,382.1</td><td><span class="pct-pos">+34.6%</span></td><td>502,659.3</td><td><span class="pct-pos">+27.4%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　消费品</td><td>9,131.8</td><td><span class="pct-pos">+8.9%</span></td><td>67,318.6</td><td><span class="pct-pos">+9.6%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　　其中：石油类消费品</td><td>1,632.3</td><td><span class="pct-pos">+44.1%</span></td><td>12,203.0</td><td><span class="pct-pos">+26.0%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　　其中：非石油类消费品</td><td>7,499.5</td><td><span class="pct-pos">+3.4%</span></td><td>55,115.6</td><td><span class="pct-pos">+6.6%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　中间用品</td><td>63,254.9</td><td><span class="pct-pos">+41.9%</span></td><td>433,935.0</td><td><span class="pct-pos">+32.7%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　　其中：石油类中间用品</td><td>3,390.7</td><td><span class="pct-pos">+23.7%</span></td><td>24,675.0</td><td><span class="pct-pos">+14.4%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　　其中：非石油类中间用品</td><td>59,864.2</td><td><span class="pct-pos">+43.1%</span></td><td>409,260.0</td><td><span class="pct-pos">+33.9%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　资本品</td><td>5,018.3</td><td><span class="pct-pos">+6.9%</span></td><td>38,283.7</td><td><span class="pct-pos">+3.0%</span></td></tr>
-            <tr style="font-weight:700;"><td>贸易差额</td><td>605.4</td><td colspan="3"></td></tr>
-          </tbody>
-        </table>
-      </div>
-      
-      <div class="card-section-label">非石油类出口目的地结构（Cuadro 3）</div>
-      <div class="section-subtitle">非石油类出口按目的地（占比为2026年1-8月累计份额，增速为各期同比）</div>
-      <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
-        <table>
-          <thead><tr><th>目的地</th><th>份额</th><th>2026年8月同比</th><th>2026年1-8月累计同比</th></tr></thead>
-          <tbody>
-            <tr><td>美国</td><td>84.7%</td><td><span class="pct-pos">+45.2%</span></td><td><span class="pct-pos">+31.6%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　其中：汽车类</td><td>19.6%</td><td><span class="pct-neg">-1.0%</span></td><td><span class="pct-neg">-1.7%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　其中：非汽车类</td><td>65.1%</td><td><span class="pct-pos">+64.8%</span></td><td><span class="pct-pos">+46.4%</span></td></tr>
-            <tr><td>其他市场</td><td>15.3%</td><td><span class="pct-pos">+23.5%</span></td><td><span class="pct-pos">+24.6%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　其中：汽车类</td><td>3.9%</td><td><span class="pct-neg">-7.8%</span></td><td><span class="pct-pos">+14.9%</span></td></tr>
-            <tr><td style="padding-left:24px; color:var(--text-secondary);">　其中：非汽车类</td><td>11.4%</td><td><span class="pct-pos">+38.6%</span></td><td><span class="pct-pos">+28.4%</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      
-      <div class="card-section-label">季节调整后环比变化（Section II）</div>
-      <div class="section-subtitle">季节调整后环比（2026年8月 vs 7月） · 季调后贸易差额 3,489 mdd（上月 -116 mdd）</div>
-      <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
-        <table>
-          <thead><tr><th>分类</th><th>环比</th></tr></thead>
-          <tbody>
-            <tr><td>出口总额</td><td><span class="pct-pos">+1.2%</span></td></tr>
-            <tr><td>　非石油类出口</td><td><span class="pct-pos">+1.6%</span></td></tr>
-            <tr><td>　石油类出口</td><td><span class="pct-neg">-13.1%</span></td></tr>
-            <tr><td>　　制造业出口</td><td><span class="pct-pos">+2.0%</span></td></tr>
-            <tr><td>　　　非汽车制造业</td><td><span class="pct-pos">+3.1%</span></td></tr>
-            <tr><td>　　　汽车类</td><td><span class="pct-neg">-1.6%</span></td></tr>
-            <tr><td>进口总额</td><td><span class="pct-neg">-3.4%</span></td></tr>
-            <tr><td>　非石油类进口</td><td><span class="pct-neg">-3.3%</span></td></tr>
-            <tr><td>　石油类进口</td><td><span class="pct-neg">-5.6%</span></td></tr>
-            <tr><td>　消费品</td><td><span class="pct-neg">-1.6%</span></td></tr>
-            <tr><td>　　非石油类消费品</td><td><span class="pct-pos">+0.4%</span></td></tr>
-            <tr><td>　中间用品</td><td><span class="pct-neg">-3.8%</span></td></tr>
-            <tr><td>　　非石油类中间用品</td><td><span class="pct-neg">-3.8%</span></td></tr>
-            <tr><td>　资本品</td><td><span class="pct-neg">-3.0%</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      
-      <div class="card-section-label">贸易结构（2026年1-8月累计，占比）</div>
-      <div style="display:flex; gap:var(--spacing-xl); flex-wrap:wrap; margin-bottom:var(--spacing-lg);">
-        <div><b>出口构成</b><ul><li>制造业产品：92.1%</li><li>非石油类采掘产品：2.7%</li><li>石油类产品：2.6%</li><li>农牧渔产品：2.6%</li></ul></div>
-        <div><b>进口构成</b><ul><li>中间用品：80.4%</li><li>消费品：12.5%</li><li>资本品：7.1%</li></ul></div>
-      </div>
-      
-      <div class="card-section-label">公报要点摘译</div>
-      <ul style="margin-bottom:var(--spacing-lg);">
-        <li>出口端表现最突出的品类：电气电子设备及器材出口同比+122.3%，矿冶产品+50.4%，塑料橡胶制品+10.6%，食品饮料烟草+10.0%，专用机械设备+7.2%；汽车类出口同比-2.2%（对美国-1.0%，对其他市场-7.8%）。</li>
-        <li>农牧渔产品出口同比-1.6%：葡萄干-60.7%、洋葱蒜头-30.0%、鹰嘴豆-25.0%、芒果-18.6%、番茄-17.6%跌幅最大；灯笼椒+39.1%、黄瓜+17.7%领涨。采掘类产品出口+45.9%。</li>
-        <li>石油出口方面：8月原油出口均价75.98美元/桶（环比+0.86，同比+13.64），但出口量降至35.1万桶/日（7月51万桶/日，去年同期59.4万桶/日）。</li>
-      </ul>
-      <p style="color:var(--text-secondary); font-size:13px;">
-        数据来源：SAT/经济部(SE)/墨西哥央行(Banxico)/INEGI联合编制的《墨西哥商品贸易差额》(BCMM)，原始记录为海关进出口报关单(pedimento aduanal)，覆盖全国50个海关(128个关区)，月度发布。当期为初步数据(cifras oportunas)，后续可能修订为最终数据。按国家×关税细目(TIGIE)的更细颗粒度数据存在于INEGI/Banxico的&quot;外贸信息立方体&quot;交互查询工具及限制访问的原始报关单微数据中，本看板目前未集成，仅采集月度公报中公开发布的汇总数据。
-        本页展示的是公报公开发布的汇总颗粒度；原始PDF已存档于仓库 <code>data/inegi_raw/balcom_2026-08_oportuna.pdf</code>，
-        <a href="https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/comext_o/balcom_o2026_09.pdf" target="_blank" rel="noopener">官方公报原文链接</a>。
-      </p>
-    </section>
-
     <section class="content-section" id="sources">
       <div class="section-title">🗂️ 数据源监控清单</div>
       <div class="section-subtitle">透明化展示每日自动采集的信源、频率与采集方式</div>
@@ -572,7 +449,7 @@
             <tr><td>ML官方数据/政策</td><td>MELI 投资者关系 / ML México 卖家政策中心</td><td>每日检索（财报为季度事件）</td><td>WebSearch + WebFetch</td><td class="status-ok">✅ 自动</td></tr>
             <tr><td>平台政策</td><td>ML佣金公告 / 卖家社区</td><td>每日检索</td><td>WebSearch + WebFetch</td><td class="status-ok">✅ 自动</td></tr>
             <tr><td>竞争与消费趋势</td><td>财经媒体 / 竞品动态报道</td><td>每日检索</td><td>WebSearch + WebFetch</td><td class="status-ok">✅ 自动</td></tr>
-            <tr><td>INEGI外贸统计（专题区）</td><td>INEGI《墨西哥商品贸易差额》月度公报</td><td>每日核查是否有新公报 / 月度实际更新</td><td>WebSearch定位公报 → 下载PDF到本地 → Node脚本解析 → 人工/LLM转录</td><td class="status-ok">✅ 自动</td></tr>
+            <tr><td>INEGI外贸统计（<a href="inegi.html">独立专题页</a>）</td><td>INEGI《墨西哥商品贸易差额》月度公报</td><td>每日核查是否有新公报 / 月度实际更新</td><td>WebSearch定位公报 → 下载PDF到本地 → Node脚本解析 → 人工/LLM转录</td><td class="status-ok">✅ 自动</td></tr>
           </tbody>
         </table>
       </div>

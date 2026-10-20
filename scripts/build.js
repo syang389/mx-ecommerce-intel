@@ -288,11 +288,11 @@ function renderSparkline(history) {
     </div>`;
 }
 
-function renderInegiTopKpi(inegi) {
+function renderInegiTopKpi(inegi, href) {
   const l = inegi && inegi.latest;
   if (!l) return '';
   return `
-        <a href="#inegi" class="kpi-card-link">
+        <a href="${href}" class="kpi-card-link">
           <div class="kpi-card">
             <div class="kpi-value">${pctSpan(l.month.imports_total_yoy_pct)}</div>
             <div class="kpi-label">INEGI进口总额同比（${escapeHtml(l.period_label_zh)}初步值）</div>
@@ -517,7 +517,7 @@ function main() {
     USD_MXN: meta.usd_mxn,
     USD_MXN_DATE: meta.usd_mxn_date,
     TOP_SUMMARY: fmt(meta.top_summary_zh),
-    INEGI_TOP_KPI: renderInegiTopKpi(inegi),
+    INEGI_TOP_KPI: renderInegiTopKpi(inegi, 'inegi.html'),
     INEGI_SECTION: renderInegiSection(inegi),
   };
 
@@ -538,6 +538,14 @@ function main() {
     template = template.split('{{' + key + '}}').join(val);
   }
   fs.writeFileSync(path.join(SITE_DIR, 'index.html'), template, 'utf8');
+
+  // inegi.html（独立页面，复用同一套 replacements：UPDATED_DATE/VERSION/COUNT_*/DOT_* 与主页同步，
+  // 额外注入 INEGI_SECTION 完整内容；该页侧边栏链接指回 index.html#各分类）
+  let inegiTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'inegi.template.html'), 'utf8');
+  for (const [key, val] of Object.entries(replacements)) {
+    inegiTemplate = inegiTemplate.split('{{' + key + '}}').join(val);
+  }
+  fs.writeFileSync(path.join(SITE_DIR, 'inegi.html'), inegiTemplate, 'utf8');
 
   // archive.html
   let archiveTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'archive.template.html'), 'utf8');
