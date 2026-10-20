@@ -113,6 +113,23 @@ th { color: var(--text-tertiary); font-weight: 600; font-size: 11.5px; text-tran
 
 footer { color: var(--text-tertiary); font-size: 12px; padding: var(--spacing-lg) 0 var(--spacing-2xl); }
 
+/* INEGI 统计区域 */
+.pct-pos { color: var(--signal-green); font-weight: 600; }
+.pct-neg { color: var(--signal-red); font-weight: 600; }
+.kpi-card-link { text-decoration: none; display: block; }
+.kpi-card-link:hover .kpi-card { box-shadow: var(--shadow-lg); }
+.sparkline { width: 100%; max-width: 560px; height: auto; display: block; margin: 0 auto; }
+.spark-line { fill: none; stroke-width: 2; }
+.spark-export { stroke: var(--navy); }
+.spark-import { stroke: var(--signal-yellow); }
+circle.spark-export { fill: var(--navy); }
+circle.spark-import { fill: var(--signal-yellow); }
+.spark-label { font-size: 10px; fill: var(--text-tertiary); }
+.spark-legend { display: flex; gap: var(--spacing-lg); justify-content: center; margin-top: 6px; font-size: 12px; color: var(--text-secondary); }
+.dot-legend { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+.dot-legend.spark-export { background: var(--navy); }
+.dot-legend.spark-import { background: var(--signal-yellow); }
+
 /* archive page */
 .archive-group { margin-bottom: var(--spacing-xl); }
 .archive-row {

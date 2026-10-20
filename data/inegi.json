@@ -1,0 +1,226 @@
+{
+  "last_checked": "2026-10-20",
+  "latest": {
+    "bulletin_no": "607/26",
+    "period": "2026-08",
+    "period_label_zh": "2026年8月",
+    "is_oportuna": true,
+    "published_date": "2026-09-28",
+    "next_publication": "2026-10-27",
+    "fetched_date": "2026-10-20",
+    "source_url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/comext_o/balcom_o2026_09.pdf",
+    "local_copy": "data/inegi_raw/balcom_2026-08_oportuna.pdf",
+    "headline_zh": "2026年8月墨西哥商品贸易实现顺差6.05亿美元（7月为逆差8.48亿美元）；出口同比+40.4%，进口同比+34.2%。1-8月累计顺差98.6亿美元（去年同期为逆差9.13亿美元）。",
+    "month": {
+      "exports_total_mdd": 78010.5,
+      "exports_total_yoy_pct": 40.4,
+      "exports_petroleras_mdd": 1581.6,
+      "exports_petroleras_yoy_pct": -2.8,
+      "exports_no_petroleras_mdd": 76428.9,
+      "exports_no_petroleras_yoy_pct": 41.7,
+      "exports_agropecuarias_mdd": 1154.5,
+      "exports_agropecuarias_yoy_pct": -1.6,
+      "exports_extractivas_mdd": 1655.9,
+      "exports_extractivas_yoy_pct": 45.9,
+      "exports_manufactureras_mdd": 73618.5,
+      "exports_manufactureras_yoy_pct": 42.6,
+      "exports_automotrices_mdd": 15926.4,
+      "exports_automotrices_yoy_pct": -2.2,
+      "exports_no_automotrices_mdd": 57692.1,
+      "exports_no_automotrices_yoy_pct": 63.2,
+      "imports_total_mdd": 77405.1,
+      "imports_total_yoy_pct": 34.2,
+      "imports_petroleras_mdd": 5023,
+      "imports_petroleras_yoy_pct": 29.6,
+      "imports_no_petroleras_mdd": 72382.1,
+      "imports_no_petroleras_yoy_pct": 34.6,
+      "imports_consumo_mdd": 9131.8,
+      "imports_consumo_yoy_pct": 8.9,
+      "imports_consumo_petroleras_mdd": 1632.3,
+      "imports_consumo_petroleras_yoy_pct": 44.1,
+      "imports_consumo_no_petroleras_mdd": 7499.5,
+      "imports_consumo_no_petroleras_yoy_pct": 3.4,
+      "imports_intermedios_mdd": 63254.9,
+      "imports_intermedios_yoy_pct": 41.9,
+      "imports_intermedios_petroleras_mdd": 3390.7,
+      "imports_intermedios_petroleras_yoy_pct": 23.7,
+      "imports_intermedios_no_petroleras_mdd": 59864.2,
+      "imports_intermedios_no_petroleras_yoy_pct": 43.1,
+      "imports_capital_mdd": 5018.3,
+      "imports_capital_yoy_pct": 6.9,
+      "balance_mdd": 605.4
+    },
+    "ytd": {
+      "label_zh": "2026年1-8月累计",
+      "exports_total_mdd": 549397.6,
+      "exports_total_yoy_pct": 29.3,
+      "exports_petroleras_mdd": 14547.9,
+      "exports_petroleras_yoy_pct": -1.3,
+      "exports_no_petroleras_mdd": 534849.7,
+      "exports_no_petroleras_yoy_pct": 30.4,
+      "exports_agropecuarias_mdd": 14354.9,
+      "exports_agropecuarias_yoy_pct": -2.9,
+      "exports_extractivas_mdd": 14671,
+      "exports_extractivas_yoy_pct": 75.1,
+      "exports_manufactureras_mdd": 505823.8,
+      "exports_manufactureras_yoy_pct": 30.8,
+      "exports_automotrices_mdd": 125524.5,
+      "exports_automotrices_yoy_pct": 0.8,
+      "exports_no_automotrices_mdd": 380299.2,
+      "exports_no_automotrices_yoy_pct": 45,
+      "imports_total_mdd": 539537.3,
+      "imports_total_yoy_pct": 26.8,
+      "imports_petroleras_mdd": 36878,
+      "imports_petroleras_yoy_pct": 18,
+      "imports_no_petroleras_mdd": 502659.3,
+      "imports_no_petroleras_yoy_pct": 27.4,
+      "imports_consumo_mdd": 67318.6,
+      "imports_consumo_yoy_pct": 9.6,
+      "imports_consumo_petroleras_mdd": 12203,
+      "imports_consumo_petroleras_yoy_pct": 26,
+      "imports_consumo_no_petroleras_mdd": 55115.6,
+      "imports_consumo_no_petroleras_yoy_pct": 6.6,
+      "imports_intermedios_mdd": 433935,
+      "imports_intermedios_yoy_pct": 32.7,
+      "imports_intermedios_petroleras_mdd": 24675,
+      "imports_intermedios_petroleras_yoy_pct": 14.4,
+      "imports_intermedios_no_petroleras_mdd": 409260,
+      "imports_intermedios_no_petroleras_yoy_pct": 33.9,
+      "imports_capital_mdd": 38283.7,
+      "imports_capital_yoy_pct": 3,
+      "balance_mdd": 9860.3,
+      "exports_structure_zh": [
+        {
+          "label_zh": "制造业产品",
+          "pct": 92.1
+        },
+        {
+          "label_zh": "非石油类采掘产品",
+          "pct": 2.7
+        },
+        {
+          "label_zh": "石油类产品",
+          "pct": 2.6
+        },
+        {
+          "label_zh": "农牧渔产品",
+          "pct": 2.6
+        }
+      ],
+      "imports_structure_zh": [
+        {
+          "label_zh": "中间用品",
+          "pct": 80.4
+        },
+        {
+          "label_zh": "消费品",
+          "pct": 12.5
+        },
+        {
+          "label_zh": "资本品",
+          "pct": 7.1
+        }
+      ]
+    },
+    "export_destinations": {
+      "label_zh": "非石油类出口按目的地（占比为2026年1-8月累计份额，增速为各期同比）",
+      "estados_unidos": {
+        "share_pct": 84.69,
+        "yoy_aug_pct": 45.2,
+        "yoy_ytd_pct": 31.6,
+        "automotriz": {
+          "share_pct": 19.55,
+          "yoy_aug_pct": -1,
+          "yoy_ytd_pct": -1.7
+        },
+        "otras": {
+          "share_pct": 65.14,
+          "yoy_aug_pct": 64.8,
+          "yoy_ytd_pct": 46.4
+        }
+      },
+      "resto_del_mundo": {
+        "share_pct": 15.31,
+        "yoy_aug_pct": 23.5,
+        "yoy_ytd_pct": 24.6,
+        "automotriz": {
+          "share_pct": 3.92,
+          "yoy_aug_pct": -7.8,
+          "yoy_ytd_pct": 14.9
+        },
+        "otras": {
+          "share_pct": 11.39,
+          "yoy_aug_pct": 38.6,
+          "yoy_ytd_pct": 28.4
+        }
+      }
+    },
+    "seasonally_adjusted_mom": {
+      "label_zh": "季节调整后环比（2026年8月 vs 7月）",
+      "balance_mdd": 3489,
+      "balance_prev_month_mdd": -116,
+      "exports_total_mom_pct": 1.23,
+      "exports_no_petroleras_mom_pct": 1.58,
+      "exports_petroleras_mom_pct": -13.11,
+      "exports_manufactureras_mom_pct": 2.01,
+      "exports_manufactureras_no_automotrices_mom_pct": 3.06,
+      "exports_automotrices_mom_pct": -1.63,
+      "imports_total_mom_pct": -3.44,
+      "imports_no_petroleras_mom_pct": -3.28,
+      "imports_petroleras_mom_pct": -5.64,
+      "imports_consumo_mom_pct": -1.58,
+      "imports_consumo_no_petroleras_mom_pct": 0.41,
+      "imports_intermedios_mom_pct": -3.75,
+      "imports_intermedios_no_petroleras_mom_pct": -3.76,
+      "imports_capital_mom_pct": -2.95
+    },
+    "narrative_highlights_zh": [
+      "出口端表现最突出的品类：电气电子设备及器材出口同比+122.3%，矿冶产品+50.4%，塑料橡胶制品+10.6%，食品饮料烟草+10.0%，专用机械设备+7.2%；汽车类出口同比-2.2%（对美国-1.0%，对其他市场-7.8%）。",
+      "农牧渔产品出口同比-1.6%：葡萄干-60.7%、洋葱蒜头-30.0%、鹰嘴豆-25.0%、芒果-18.6%、番茄-17.6%跌幅最大；灯笼椒+39.1%、黄瓜+17.7%领涨。采掘类产品出口+45.9%。",
+      "石油出口方面：8月原油出口均价75.98美元/桶（环比+0.86，同比+13.64），但出口量降至35.1万桶/日（7月51万桶/日，去年同期59.4万桶/日）。"
+    ],
+    "methodology_zh": "数据来源：SAT/经济部(SE)/墨西哥央行(Banxico)/INEGI联合编制的《墨西哥商品贸易差额》(BCMM)，原始记录为海关进出口报关单(pedimento aduanal)，覆盖全国50个海关(128个关区)，月度发布。当期为初步数据(cifras oportunas)，后续可能修订为最终数据。按国家×关税细目(TIGIE)的更细颗粒度数据存在于INEGI/Banxico的\"外贸信息立方体\"交互查询工具及限制访问的原始报关单微数据中，本看板目前未集成，仅采集月度公报中公开发布的汇总数据。"
+  },
+  "history": [
+    {
+      "period": "2024",
+      "period_label_zh": "2024年全年",
+      "granularity": "annual",
+      "exports_total_mdd": 617771,
+      "imports_total_mdd": 636218,
+      "balance_mdd": -18447
+    },
+    {
+      "period": "2025",
+      "period_label_zh": "2025年全年",
+      "granularity": "annual",
+      "exports_total_mdd": 664267,
+      "imports_total_mdd": 664057,
+      "balance_mdd": 209
+    },
+    {
+      "period": "2026-06",
+      "period_label_zh": "2026年6月",
+      "granularity": "monthly",
+      "exports_total_mdd": 72521,
+      "imports_total_mdd": 68461,
+      "balance_mdd": 4060
+    },
+    {
+      "period": "2026-07",
+      "period_label_zh": "2026年7月",
+      "granularity": "monthly",
+      "exports_total_mdd": 81420,
+      "imports_total_mdd": 82268,
+      "balance_mdd": -848
+    },
+    {
+      "period": "2026-08",
+      "period_label_zh": "2026年8月",
+      "granularity": "monthly",
+      "exports_total_mdd": 78010,
+      "imports_total_mdd": 77405,
+      "balance_mdd": 605
+    }
+  ]
+}

@@ -113,8 +113,46 @@
 
 **B层：**
 - Banco de México 汇率页（备用/交叉核对） https://www.banxico.org.mx/tipcamb/tipCamMIAction.do?idioma=es
-- INEGI 零售/电商统计 https://www.inegi.org.mx/
 - 关键词：`Shein Temu AliExpress México arancel precio`, `Amazon México Coppel competencia`, `ecommerce México crecimiento`
+
+## 8. INEGI 外贸统计（专题区域，独立于七大分类/信号卡片体系）
+
+这是看板首页一个独立的专题区域（`#inegi`），展示 INEGI《墨西哥商品贸易差额》(BCMM) 月度公报，
+**不走🔴🟡🟢信号卡片/15天归档逻辑**——这是持续更新的统计数据，不是离散事件。
+
+**信源：** INEGI 月度公报 PDF，发布页 https://www.inegi.org.mx/app/saladeprensa/noticia/ ，
+已验证的历史URL模式（编号非完全可预测，需每次用 WebSearch 定位）：
+`https://www.inegi.org.mx/contenidos/saladeprensa/boletines/{年}/comext_o/balcom_o{年}_{两位数编号}.pdf`
+
+**频率：** 月度，约滞后4周（如8月数据在9月28日发布，标注"cifras oportunas"初步数据）。
+`data/inegi.json` 的 `latest.next_publication` 字段记录了上一份公报自己声明的下次发布日期，
+可以用来判断今天是否值得去检查新公报（但即使还没到那个日期，偶尔提前发布也正常，建议还是
+每天花一次 WebSearch 快速确认，成本很低）。
+
+**已知技术限制：WebFetch 无法可靠解析该PDF**（曾返回"raw PDF code"而不是文本）。正确流程：
+
+1. WebSearch 查找当月公报（关键词如"INEGI balanza comercial boletín {月份} {年} pdf"），确认是否
+   有比 `data/inegi.json` 里 `latest.period` 更新的月份。如果没有更新，只需把 `data/inegi_in.json`
+   的 `last_checked` 设为今天，`latest`/`history_upserts` 留空，结束。
+2. 如果有新公报：用 `curl -s -o data/inegi_raw/<期间>.pdf <公报URL>` **把PDF下载到项目本地**
+   （`data/inegi_raw/` 目录，文件名建议 `balcom_<YYYY-MM>_oportuna.pdf`，保留原始文件作为可追溯存档）。
+3. 确认 `pdf-parse` 可用：`node -e "require('pdf-parse')"`，不可用就先 `npm install --no-save pdf-parse`。
+4. 运行 `node scripts/extract_pdf.js data/inegi_raw/<文件名>.pdf` 把PDF转成纯文本（输出到stdout，
+   可以用 `> /tmp/xxx.txt` 重定向后 Read，或直接用 Bash 管道截取）。
+5. 阅读提取出的文本，按 `data/inegi.json` 现有的 `latest` 对象结构（`month`/`ytd`/`export_destinations`/
+   `seasonally_adjusted_mom`/`narrative_highlights_zh`/`methodology_zh` 等字段）**尽可能完整地**
+   转录为结构化数据——包括 Cuadro 1 里每一个子分类（石油/非石油/农牧渔/采掘/制造/汽车/非汽车、
+   消费品/中间用品/资本品及其石油/非石油细分）**本月和累计两组数字都要**，不要只记总计。
+   写入 `data/inegi_in.json` 的 `latest` 字段（完整对象）。
+6. 同时把 Cuadro 2 里出现的月度时间序列点（通常是最近2-3个月，有时会修订之前月份的数值）整理成
+   `history_upserts` 数组（每项 `{period:"YYYY-MM", period_label_zh, granularity:"monthly",
+   exports_total_mdd, imports_total_mdd, balance_mdd}`），交给 `node scripts/build.js` 按 period
+   去重合并（已存在的 period 会被新数值覆盖，用于捕捉"oportuna→definitiva"修订）。
+7. `data/inegi_in.json` 的 `last_checked` 设为今天。
+8. 运行 `node scripts/build.js`（与信号卡片合并是同一次调用，不需要单独跑）。
+
+**红线：** 不得编造任何数字；如果PDF解析出的文本里某个字段缺失/模糊，就在 `narrative_highlights_zh`
+里如实说明"本期未能确认XX数值"，不要用上个月的数字填充当月字段。
 
 ---
 

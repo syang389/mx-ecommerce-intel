@@ -15,6 +15,8 @@ const ALERTS_PATH = path.join(DATA_DIR, 'alerts.json');
 const INCOMING_PATH = path.join(DATA_DIR, 'incoming.json');
 const META_IN_PATH = path.join(DATA_DIR, 'meta_in.json');
 const META_PATH = path.join(DATA_DIR, 'meta.json');
+const INEGI_PATH = path.join(DATA_DIR, 'inegi.json');
+const INEGI_IN_PATH = path.join(DATA_DIR, 'inegi_in.json');
 
 const RECENCY_DAYS = 15;
 
@@ -214,6 +216,248 @@ function renderArchiveRow(a) {
     </div>`;
 }
 
+// ---------- INEGI 外贸统计 ----------
+
+function fmtNum(n, decimals = 1) {
+  if (n == null || isNaN(n)) return '-';
+  return Number(n).toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+}
+
+function fmtPct(n) {
+  if (n == null || isNaN(n)) return '-';
+  const sign = n > 0 ? '+' : '';
+  return `${sign}${Number(n).toFixed(1)}%`;
+}
+
+function pctCls(n) {
+  if (n == null || isNaN(n)) return '';
+  return n > 0 ? 'pct-pos' : n < 0 ? 'pct-neg' : '';
+}
+
+function pctSpan(n) {
+  return `<span class="${pctCls(n)}">${fmtPct(n)}</span>`;
+}
+
+// 仅合并 last_checked / latest / history_upserts，不改变其余结构；history 按 period 去重覆盖（支持修订）
+function mergeInegi(inegi, inegiIn) {
+  if (inegiIn.last_checked) inegi.last_checked = inegiIn.last_checked;
+  if (inegiIn.latest) inegi.latest = inegiIn.latest;
+  const history = inegi.history || (inegi.history = []);
+  for (const point of inegiIn.history_upserts || []) {
+    const idx = history.findIndex((h) => h.period === point.period);
+    if (idx >= 0) history[idx] = point;
+    else history.push(point);
+  }
+  history.sort((a, b) => String(a.period).localeCompare(String(b.period)));
+  return inegi;
+}
+
+// 纯SVG折线图，只画月度颗粒度的点（年度总量与月度量级相差过大，不适合同轴绘制）
+function renderSparkline(history) {
+  const monthly = (history || []).filter((h) => h.granularity === 'monthly');
+  if (monthly.length < 2) return '<p class="empty-note">历史月度数据点不足，暂无法绘制趋势线（需累计至少2个月）。</p>';
+
+  const W = 560, H = 140, PAD = 28;
+  const allVals = monthly.flatMap((h) => [h.exports_total_mdd, h.imports_total_mdd]);
+  const max = Math.max(...allVals), min = Math.min(...allVals);
+  const span = max - min || 1;
+  const x = (i) => PAD + (i * (W - PAD * 2)) / (monthly.length - 1);
+  const y = (v) => H - PAD - ((v - min) / span) * (H - PAD * 2);
+
+  const linePath = (key) =>
+    monthly.map((h, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(h[key]).toFixed(1)}`).join(' ');
+
+  const dots = (key, cls) =>
+    monthly.map((h, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(h[key]).toFixed(1)}" r="3" class="${cls}"/>`).join('');
+
+  const labels = monthly
+    .map((h, i) => `<text x="${x(i).toFixed(1)}" y="${H - 6}" class="spark-label" text-anchor="middle">${escapeHtml(h.period_label_zh || h.period)}</text>`)
+    .join('');
+
+  return `
+    <svg class="sparkline" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="月度出口/进口趋势">
+      <path d="${linePath('exports_total_mdd')}" class="spark-line spark-export"/>
+      <path d="${linePath('imports_total_mdd')}" class="spark-line spark-import"/>
+      ${dots('exports_total_mdd', 'spark-export')}
+      ${dots('imports_total_mdd', 'spark-import')}
+      ${labels}
+    </svg>
+    <div class="spark-legend">
+      <span><span class="dot-legend spark-export"></span>出口总额 (mdd)</span>
+      <span><span class="dot-legend spark-import"></span>进口总额 (mdd)</span>
+    </div>`;
+}
+
+function renderInegiTopKpi(inegi) {
+  const l = inegi && inegi.latest;
+  if (!l) return '';
+  return `
+        <a href="#inegi" class="kpi-card-link">
+          <div class="kpi-card">
+            <div class="kpi-value">${pctSpan(l.month.imports_total_yoy_pct)}</div>
+            <div class="kpi-label">INEGI进口总额同比（${escapeHtml(l.period_label_zh)}初步值）</div>
+          </div>
+        </a>`;
+}
+
+function cuadro1Row(label, mdd, yoyPct, ytdMdd, ytdYoyPct, indent) {
+  const pad = indent ? ' style="padding-left:24px; color:var(--text-secondary);"' : '';
+  return `<tr><td${pad}>${escapeHtml(label)}</td><td>${fmtNum(mdd)}</td><td>${pctSpan(yoyPct)}</td><td>${fmtNum(ytdMdd)}</td><td>${pctSpan(ytdYoyPct)}</td></tr>`;
+}
+
+function renderInegiSection(inegi) {
+  if (!inegi || !inegi.latest) {
+    return `
+      <div class="section-title">📊 INEGI 墨西哥对外贸易统计</div>
+      <div class="section-subtitle">尚未采集到 INEGI 月度贸易公报数据。</div>`;
+  }
+  const l = inegi.latest;
+  const m = l.month, y = l.ytd, d = l.export_destinations, sa = l.seasonally_adjusted_mom;
+
+  const asOfBanner = `
+      <div class="top-signal-box" style="margin-bottom:var(--spacing-lg);">
+        <h3>数据时效说明</h3>
+        <p>
+          数据期间：<b>${escapeHtml(l.period_label_zh)}</b>（${l.is_oportuna ? '初步数据 cifras oportunas，后续可能修订' : '最终数据'}）
+          · INEGI公报发布日期：<b>${escapeHtml(l.published_date)}</b>（公报${escapeHtml(l.bulletin_no)}号）
+          · 看板最近核查日期：<b>${escapeHtml(inegi.last_checked || '-')}</b>
+          · INEGI下次发布预计：<b>${escapeHtml(l.next_publication || '-')}</b>
+        </p>
+      </div>`;
+
+  const headlineKpi = `
+      <div class="kpi-grid" style="margin-bottom:var(--spacing-lg);">
+        <div class="kpi-card"><div class="kpi-value">${fmtNum(m.exports_total_mdd, 0)}</div><div class="kpi-label">出口总额 mdd（${pctSpan(m.exports_total_yoy_pct)} 同比）</div></div>
+        <div class="kpi-card"><div class="kpi-value">${fmtNum(m.imports_total_mdd, 0)}</div><div class="kpi-label">进口总额 mdd（${pctSpan(m.imports_total_yoy_pct)} 同比）</div></div>
+        <div class="kpi-card"><div class="kpi-value">${fmtNum(m.balance_mdd, 0)}</div><div class="kpi-label">贸易差额 mdd（${m.balance_mdd >= 0 ? '顺差' : '逆差'}）</div></div>
+      </div>`;
+
+  const cuadro1 = `
+      <div class="card-section-label">贸易差额构成明细（Cuadro 1，原始数据）</div>
+      <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
+        <table>
+          <thead><tr><th>分类</th><th>${escapeHtml(l.period_label_zh)} (mdd)</th><th>同比</th><th>${escapeHtml(y.label_zh)} (mdd)</th><th>同比</th></tr></thead>
+          <tbody>
+            ${cuadro1Row('出口总额', m.exports_total_mdd, m.exports_total_yoy_pct, y.exports_total_mdd, y.exports_total_yoy_pct)}
+            ${cuadro1Row('　石油类', m.exports_petroleras_mdd, m.exports_petroleras_yoy_pct, y.exports_petroleras_mdd, y.exports_petroleras_yoy_pct, true)}
+            ${cuadro1Row('　非石油类', m.exports_no_petroleras_mdd, m.exports_no_petroleras_yoy_pct, y.exports_no_petroleras_mdd, y.exports_no_petroleras_yoy_pct, true)}
+            ${cuadro1Row('　　农牧渔产品', m.exports_agropecuarias_mdd, m.exports_agropecuarias_yoy_pct, y.exports_agropecuarias_mdd, y.exports_agropecuarias_yoy_pct, true)}
+            ${cuadro1Row('　　采掘业产品', m.exports_extractivas_mdd, m.exports_extractivas_yoy_pct, y.exports_extractivas_mdd, y.exports_extractivas_yoy_pct, true)}
+            ${cuadro1Row('　　制造业产品', m.exports_manufactureras_mdd, m.exports_manufactureras_yoy_pct, y.exports_manufactureras_mdd, y.exports_manufactureras_yoy_pct, true)}
+            ${cuadro1Row('　　　汽车类', m.exports_automotrices_mdd, m.exports_automotrices_yoy_pct, y.exports_automotrices_mdd, y.exports_automotrices_yoy_pct, true)}
+            ${cuadro1Row('　　　非汽车类', m.exports_no_automotrices_mdd, m.exports_no_automotrices_yoy_pct, y.exports_no_automotrices_mdd, y.exports_no_automotrices_yoy_pct, true)}
+            ${cuadro1Row('进口总额', m.imports_total_mdd, m.imports_total_yoy_pct, y.imports_total_mdd, y.imports_total_yoy_pct)}
+            ${cuadro1Row('　石油类', m.imports_petroleras_mdd, m.imports_petroleras_yoy_pct, y.imports_petroleras_mdd, y.imports_petroleras_yoy_pct, true)}
+            ${cuadro1Row('　非石油类', m.imports_no_petroleras_mdd, m.imports_no_petroleras_yoy_pct, y.imports_no_petroleras_mdd, y.imports_no_petroleras_yoy_pct, true)}
+            ${cuadro1Row('　消费品', m.imports_consumo_mdd, m.imports_consumo_yoy_pct, y.imports_consumo_mdd, y.imports_consumo_yoy_pct, true)}
+            ${cuadro1Row('　　其中：石油类消费品', m.imports_consumo_petroleras_mdd, m.imports_consumo_petroleras_yoy_pct, y.imports_consumo_petroleras_mdd, y.imports_consumo_petroleras_yoy_pct, true)}
+            ${cuadro1Row('　　其中：非石油类消费品', m.imports_consumo_no_petroleras_mdd, m.imports_consumo_no_petroleras_yoy_pct, y.imports_consumo_no_petroleras_mdd, y.imports_consumo_no_petroleras_yoy_pct, true)}
+            ${cuadro1Row('　中间用品', m.imports_intermedios_mdd, m.imports_intermedios_yoy_pct, y.imports_intermedios_mdd, y.imports_intermedios_yoy_pct, true)}
+            ${cuadro1Row('　　其中：石油类中间用品', m.imports_intermedios_petroleras_mdd, m.imports_intermedios_petroleras_yoy_pct, y.imports_intermedios_petroleras_mdd, y.imports_intermedios_petroleras_yoy_pct, true)}
+            ${cuadro1Row('　　其中：非石油类中间用品', m.imports_intermedios_no_petroleras_mdd, m.imports_intermedios_no_petroleras_yoy_pct, y.imports_intermedios_no_petroleras_mdd, y.imports_intermedios_no_petroleras_yoy_pct, true)}
+            ${cuadro1Row('　资本品', m.imports_capital_mdd, m.imports_capital_yoy_pct, y.imports_capital_mdd, y.imports_capital_yoy_pct, true)}
+            <tr style="font-weight:700;"><td>贸易差额</td><td>${fmtNum(m.balance_mdd)}</td><td colspan="3"></td></tr>
+          </tbody>
+        </table>
+      </div>`;
+
+  const destRow = (label, obj, indent) => {
+    const pad = indent ? ' style="padding-left:24px; color:var(--text-secondary);"' : '';
+    return `<tr><td${pad}>${escapeHtml(label)}</td><td>${fmtNum(obj.share_pct)}%</td><td>${pctSpan(obj.yoy_aug_pct)}</td><td>${pctSpan(obj.yoy_ytd_pct)}</td></tr>`;
+  };
+  const destinations = d
+    ? `
+      <div class="card-section-label">非石油类出口目的地结构（Cuadro 3）</div>
+      <div class="section-subtitle">${escapeHtml(d.label_zh)}</div>
+      <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
+        <table>
+          <thead><tr><th>目的地</th><th>份额</th><th>${escapeHtml(l.period_label_zh)}同比</th><th>${escapeHtml(y.label_zh)}同比</th></tr></thead>
+          <tbody>
+            ${destRow('美国', d.estados_unidos)}
+            ${destRow('　其中：汽车类', d.estados_unidos.automotriz, true)}
+            ${destRow('　其中：非汽车类', d.estados_unidos.otras, true)}
+            ${destRow('其他市场', d.resto_del_mundo)}
+            ${destRow('　其中：汽车类', d.resto_del_mundo.automotriz, true)}
+            ${destRow('　其中：非汽车类', d.resto_del_mundo.otras, true)}
+          </tbody>
+        </table>
+      </div>`
+    : '';
+
+  const saRow = (label, pct) => `<tr><td>${escapeHtml(label)}</td><td>${pctSpan(pct)}</td></tr>`;
+  const seasonal = sa
+    ? `
+      <div class="card-section-label">季节调整后环比变化（Section II）</div>
+      <div class="section-subtitle">${escapeHtml(sa.label_zh)} · 季调后贸易差额 ${fmtNum(sa.balance_mdd, 0)} mdd（上月 ${fmtNum(sa.balance_prev_month_mdd, 0)} mdd）</div>
+      <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
+        <table>
+          <thead><tr><th>分类</th><th>环比</th></tr></thead>
+          <tbody>
+            ${saRow('出口总额', sa.exports_total_mom_pct)}
+            ${saRow('　非石油类出口', sa.exports_no_petroleras_mom_pct)}
+            ${saRow('　石油类出口', sa.exports_petroleras_mom_pct)}
+            ${saRow('　　制造业出口', sa.exports_manufactureras_mom_pct)}
+            ${saRow('　　　非汽车制造业', sa.exports_manufactureras_no_automotrices_mom_pct)}
+            ${saRow('　　　汽车类', sa.exports_automotrices_mom_pct)}
+            ${saRow('进口总额', sa.imports_total_mom_pct)}
+            ${saRow('　非石油类进口', sa.imports_no_petroleras_mom_pct)}
+            ${saRow('　石油类进口', sa.imports_petroleras_mom_pct)}
+            ${saRow('　消费品', sa.imports_consumo_mom_pct)}
+            ${saRow('　　非石油类消费品', sa.imports_consumo_no_petroleras_mom_pct)}
+            ${saRow('　中间用品', sa.imports_intermedios_mom_pct)}
+            ${saRow('　　非石油类中间用品', sa.imports_intermedios_no_petroleras_mom_pct)}
+            ${saRow('　资本品', sa.imports_capital_mom_pct)}
+          </tbody>
+        </table>
+      </div>`
+    : '';
+
+  const structureList = (items) =>
+    (items || []).map((it) => `<li>${escapeHtml(it.label_zh)}：${fmtNum(it.pct)}%</li>`).join('');
+  const structure = `
+      <div class="card-section-label">贸易结构（${escapeHtml(y.label_zh)}，占比）</div>
+      <div style="display:flex; gap:var(--spacing-xl); flex-wrap:wrap; margin-bottom:var(--spacing-lg);">
+        <div><b>出口构成</b><ul>${structureList(y.exports_structure_zh)}</ul></div>
+        <div><b>进口构成</b><ul>${structureList(y.imports_structure_zh)}</ul></div>
+      </div>`;
+
+  const narrative = (l.narrative_highlights_zh || []).length
+    ? `
+      <div class="card-section-label">公报要点摘译</div>
+      <ul style="margin-bottom:var(--spacing-lg);">
+        ${l.narrative_highlights_zh.map((n) => `<li>${fmt(n)}</li>`).join('\n        ')}
+      </ul>`
+    : '';
+
+  const annualHistory = (inegi.history || []).filter((h) => h.granularity === 'annual');
+  const annualNote = annualHistory.length
+    ? `<p style="color:var(--text-secondary); font-size:13px; margin-bottom:var(--spacing-md);">历史年度参考：${annualHistory
+        .map((h) => `${escapeHtml(h.period_label_zh)} 出口${fmtNum(h.exports_total_mdd, 0)}mdd / 进口${fmtNum(h.imports_total_mdd, 0)}mdd`)
+        .join('；')}</p>`
+    : '';
+
+  return `
+      <div class="section-title">📊 INEGI 墨西哥对外贸易统计</div>
+      <div class="section-subtitle">月度商品贸易差额(BCMM)，专题区域——与上方七大分类的🔴🟡🟢信号卡片体系分开展示，本区域为统计数据而非事件信号</div>
+      ${asOfBanner}
+      ${headlineKpi}
+      <div class="card-section-label">月度出口/进口趋势（mdd，仅月度颗粒度点）</div>
+      <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
+        ${renderSparkline(inegi.history)}
+      </div>
+      ${annualNote}
+      ${cuadro1}
+      ${destinations}
+      ${seasonal}
+      ${structure}
+      ${narrative}
+      <p style="color:var(--text-secondary); font-size:13px;">
+        ${fmt(l.methodology_zh)}
+        本页展示的是公报公开发布的汇总颗粒度；原始PDF已存档于仓库 <code>${escapeHtml(l.local_copy || '')}</code>，
+        <a href="${escapeHtml(l.source_url)}" target="_blank" rel="noopener">官方公报原文链接</a>。
+      </p>`;
+}
+
 function bumpVersion(v) {
   const n = parseFloat(v);
   if (isNaN(n)) return '1.0';
@@ -227,6 +471,8 @@ function main() {
   const incoming = readJsonStrict(INCOMING_PATH, []);
   const metaIn = readJsonStrict(META_IN_PATH, {});
   const prevMeta = readJson(META_PATH, { version: '1.0', usd_mxn: '-', usd_mxn_date: '-', top_summary_zh: '' });
+  let inegi = readJson(INEGI_PATH, { last_checked: null, latest: null, history: [] });
+  const inegiIn = readJsonStrict(INEGI_IN_PATH, { last_checked: null, latest: null, history_upserts: [] });
 
   const { addedCount, skippedCount } = mergeIncoming(alerts, incoming, today);
   recomputeStatus(alerts, today);
@@ -245,6 +491,10 @@ function main() {
   writeJson(META_PATH, meta);
   // meta_in 消费后清空，避免下次误用旧值（agent每次运行都应重新写入）
   writeJson(META_IN_PATH, {});
+
+  inegi = mergeInegi(inegi, inegiIn);
+  writeJson(INEGI_PATH, inegi);
+  writeJson(INEGI_IN_PATH, { last_checked: null, latest: null, history_upserts: [] });
 
   const active = alerts.filter((a) => a.status === 'active');
   const archived = alerts.filter((a) => a.status === 'archived');
@@ -267,6 +517,8 @@ function main() {
     USD_MXN: meta.usd_mxn,
     USD_MXN_DATE: meta.usd_mxn_date,
     TOP_SUMMARY: fmt(meta.top_summary_zh),
+    INEGI_TOP_KPI: renderInegiTopKpi(inegi),
+    INEGI_SECTION: renderInegiSection(inegi),
   };
 
   for (const cat of CATEGORIES) {
