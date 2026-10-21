@@ -533,67 +533,6 @@ function renderGaccOverallTrend(ts) {
     </svg>`;
 }
 
-function renderGaccYoyTable(ts) {
-  const periods = Object.keys(ts.periods || {});
-  const years = [...new Set(periods.map((p) => p.slice(0, 4)))].sort();
-  if (years.length < 2) {
-    return '<p class="empty-note">目前只有一个年度的数据，暂无法计算同比（至少需要两个年度的重叠月份）。</p>';
-  }
-  const [yA, yB] = years.slice(-2); // 取最近两个年度比较
-  const monthsA = new Set(periods.filter((p) => p.startsWith(yA)).map((p) => p.slice(5, 7)));
-  const monthsB = new Set(periods.filter((p) => p.startsWith(yB)).map((p) => p.slice(5, 7)));
-  const overlapMonths = [...monthsA].filter((m) => monthsB.has(m)).sort();
-  if (overlapMonths.length === 0) {
-    return '<p class="empty-note">两个年度之间没有重叠月份，暂无法计算同比。</p>';
-  }
-
-  const allCats = new Set();
-  for (const p of periods) Object.keys(ts.periods[p].categories || {}).forEach((c) => allCats.add(c));
-
-  const sumFor = (year, cat) => {
-    let s = 0;
-    for (const m of overlapMonths) {
-      const p = `${year}-${m}`;
-      const c = ts.periods[p] && ts.periods[p].categories[cat];
-      if (c) s += c.value_usd;
-    }
-    return s;
-  };
-  const sumTotalFor = (year) => {
-    let s = 0;
-    for (const m of overlapMonths) {
-      const p = `${year}-${m}`;
-      if (ts.periods[p]) s += ts.periods[p].total_value_usd;
-    }
-    return s;
-  };
-
-  const rows = [...allCats]
-    .map((cat) => ({ cat, a: sumFor(yA, cat), b: sumFor(yB, cat) }))
-    .sort((x, y) => y.b - x.b)
-    .map(({ cat, a, b }) => {
-      const yoy = a > 0 ? ((b - a) / a) * 100 : null;
-      return `<tr><td>${escapeHtml(cat)}</td><td>$${fmtNum(a, 0)}</td><td>$${fmtNum(b, 0)}</td><td>${yoy == null ? '-' : pctSpan(yoy)}</td></tr>`;
-    })
-    .join('\n            ');
-
-  const totalA = sumTotalFor(yA), totalB = sumTotalFor(yB);
-  const totalYoy = totalA > 0 ? ((totalB - totalA) / totalA) * 100 : null;
-  const monthLabel = `${overlapMonths[0]}月–${overlapMonths[overlapMonths.length - 1]}月`;
-
-  return `
-      <div class="section-subtitle">同比口径：${escapeHtml(yA)}年${monthLabel} vs ${escapeHtml(yB)}年${monthLabel}（仅比较两年都有数据的重叠月份，保证口径一致）</div>
-      <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
-        <table>
-          <thead><tr><th>品类</th><th>${escapeHtml(yA)}年同期</th><th>${escapeHtml(yB)}年同期</th><th>同比</th></tr></thead>
-          <tbody>
-            ${rows}
-            <tr style="font-weight:700;"><td>合计</td><td>$${fmtNum(totalA, 0)}</td><td>$${fmtNum(totalB, 0)}</td><td>${totalYoy == null ? '-' : pctSpan(totalYoy)}</td></tr>
-          </tbody>
-        </table>
-      </div>`;
-}
-
 function renderGaccCategoryBar(name, value, maxValue, count, sparklineHtml) {
   const pct = maxValue > 0 ? (value / maxValue) * 100 : 0;
   return `
@@ -642,25 +581,38 @@ function renderGaccSection(gacc, gaccTs) {
 
   const trendAndYoy = tsPeriodKeys.length >= 2
     ? `
-      <div class="card-section-label">月度趋势与同比（${escapeHtml(gaccTs.coverage.start_period)} ~ ${escapeHtml(gaccTs.coverage.end_period)}，共${gaccTs.coverage.months}个月，已按124个相关HS8编码+已筛选贸易方式导出，本阶段无省份维度）</div>
+      <div class="card-section-label">月度趋势（${escapeHtml(gaccTs.coverage.start_period)} ~ ${escapeHtml(gaccTs.coverage.end_period)}）</div>
       <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
         ${renderGaccOverallTrend(gaccTs)}
         <div class="spark-legend"><span><span class="dot-legend spark-export"></span>卖家相关品类总额 (USD/月)</span></div>
-      </div>
-      ${renderGaccYoyTable(gaccTs)}`
+      </div>`
     : '';
+
+  // PCP(同期比较)：当前快照月份 vs 去年同月。先算每个品类的同比，再给到每条HS8明细。
+  const periodDate = /^(\d{4})-(\d{2})$/.exec(l.period);
+  const pcpPeriod = periodDate ? `${parseInt(periodDate[1], 10) - 1}-${periodDate[2]}` : null;
+  const pcpPeriodData = pcpPeriod && tsPeriods[pcpPeriod] ? tsPeriods[pcpPeriod] : null;
+  const pcpPct = (current, prior) => (prior > 0 ? ((current - prior) / prior) * 100 : null);
 
   const detailTables = cats
     .map(([name, v]) => {
       const rows = v.items
         .slice(0, 8)
-        .map((it) => `<tr><td>${escapeHtml(it.hs8)}</td><td>${escapeHtml(it.name_zh)}</td><td>$${fmtNum(it.value_usd, 0)}</td></tr>`)
+        .map((it) => {
+          const priorItem = pcpPeriodData && pcpPeriodData.items[it.hs8];
+          const pct = priorItem ? pcpPct(it.value_usd, priorItem.value_usd) : null;
+          const pctCell = priorItem ? (pct == null ? '-' : pctSpan(pct)) : '新增';
+          return `<tr><td>${escapeHtml(it.hs8)}</td><td>${escapeHtml(it.name_zh)}</td><td>$${fmtNum(it.value_usd, 0)}</td><td>${pctCell}</td></tr>`;
+        })
         .join('\n            ');
+      const catPrior = pcpPeriodData && pcpPeriodData.categories[name];
+      const catPct = catPrior ? pcpPct(v.value_usd, catPrior.value_usd) : null;
+      const catPctLabel = catPrior ? (catPct == null ? '' : ` · PCP ${fmtPct(catPct)}`) : '';
       return `
-      <div class="card-section-label">${escapeHtml(name)} — 明细前${Math.min(8, v.items.length)}条（共${v.count}条，合计$${fmtNum(v.value_usd, 0)}）</div>
+      <div class="card-section-label">${escapeHtml(name)} — 明细前${Math.min(8, v.items.length)}条（共${v.count}条，合计$${fmtNum(v.value_usd, 0)}${catPctLabel}）</div>
       <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
         <table>
-          <thead><tr><th>HS8编码</th><th>商品名称</th><th>金额(USD)</th></tr></thead>
+          <thead><tr><th>HS8编码</th><th>商品名称</th><th>金额(USD)</th><th>PCP%（${escapeHtml(pcpPeriod || '-')}）</th></tr></thead>
           <tbody>
             ${rows}
           </tbody>
@@ -706,12 +658,11 @@ function renderGaccSection(gacc, gaccTs) {
       <div class="section-subtitle">中国海关统计数据在线查询平台（人工导出）· HS8位颗粒度 · 已按卖家实际SKU范围筛选 · 专题区域，独立于上方信号卡片体系</div>
       ${asOfBanner}
       ${trendAndYoy}
-      <div class="card-section-label">卖家相关品类占比（按筛选后金额排序，右侧小图为该品类近${tsPeriodKeys.length || 0}个月趋势）</div>
-      <div class="section-subtitle">注意口径差异：上方同比表是多月累计（见其口径说明），下方条形图金额是单月（${escapeHtml(periodLabel)}）快照，两者不是同一个数字</div>
+      <div class="card-section-label">卖家相关品类占比（${escapeHtml(periodLabel)}，右侧小图为近${tsPeriodKeys.length || 0}个月趋势）</div>
       <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
         ${bars}
       </div>
-      <div class="section-subtitle" style="margin-top:var(--spacing-xl); font-weight:700; color:var(--navy);">基准快照：${escapeHtml(periodLabel)}（完整筛选过程，用于审计/复核）</div>
+      <div class="section-subtitle" style="margin-top:var(--spacing-xl); font-weight:700; color:var(--navy);">基准快照：${escapeHtml(periodLabel)}</div>
       ${kpi}
       ${detailTables}
       ${transparency}

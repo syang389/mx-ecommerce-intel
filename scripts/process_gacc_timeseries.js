@@ -65,7 +65,7 @@ function processFile(csvPath, rules, periods, unclassified) {
     }
 
     const result = lib.classify(hs8, name, rules);
-    if (!periods[period]) periods[period] = { categories: {}, total_value_usd: 0, row_count: 0 };
+    if (!periods[period]) periods[period] = { categories: {}, items: {}, total_value_usd: 0, row_count: 0 };
     const p = periods[period];
     p.row_count++;
     p.total_value_usd += value;
@@ -74,6 +74,10 @@ function processFile(csvPath, rules, periods, unclassified) {
       if (!p.categories[result.category]) p.categories[result.category] = { count: 0, value_usd: 0 };
       p.categories[result.category].count++;
       p.categories[result.category].value_usd += value;
+      // 同一HS8编码在同一月份可能有多条贸易方式的行（比如一般贸易+进料加工），累加成单一月度值，
+      // 用于后续计算该编码的同比/环比
+      if (!p.items[hs8]) p.items[hs8] = { name_zh: name, category: result.category, value_usd: 0 };
+      p.items[hs8].value_usd += value;
     } else {
       // 预筛选过的数据理论上不该出现未匹配/工业品，出现了就记下来，提示人工检查规则是否需要补充
       unclassified.push({ period, hs8, name_zh: name, value_usd: value, status: result.status, source_file: path.relative(lib.ROOT, csvPath) });
