@@ -108,11 +108,45 @@ function fmt(s) {
 const SEVERITY_RANK = { red: 3, yellow: 2, green: 1 };
 const SEVERITY_LABEL = { red: '🔴 高', yellow: '🟡 中', green: '🟢 参考' };
 
+// data_summary 类型卡片（INEGI/GACC数据摘要）用稳定id做更新式合并（内容会被整体覆盖），
+// 不是普通卡片的"按URL去重、已存在就跳过"逻辑——这些卡片本身就是要被持续刷新的。
 function mergeIncoming(alerts, incoming, today) {
-  const known = new Set(alerts.map((a) => a.id));
+  const known = new Set(alerts.filter((a) => a.card_type !== 'data_summary').map((a) => a.id));
   let addedCount = 0;
   let skippedCount = 0;
+  let updatedCount = 0;
   for (const raw of incoming) {
+    if (raw.card_type === 'data_summary') {
+      if (!raw.id || !raw.tracks_source || !raw.tracks_period) {
+        throw new Error('data_summary 类型卡片必须提供 id/tracks_source/tracks_period 字段');
+      }
+      const idx = alerts.findIndex((a) => a.id === raw.id);
+      const periodChanged = idx < 0 || alerts[idx].tracks_period !== raw.tracks_period;
+      const entry = {
+        id: raw.id,
+        category: raw.category,
+        severity: raw.severity,
+        severity_reason: raw.severity_reason || '',
+        title_zh: raw.title_zh || '',
+        facts_zh: raw.facts_zh || [],
+        source: raw.source || {},
+        actions_zh: raw.actions_zh || [],
+        card_type: 'data_summary',
+        tracks_source: raw.tracks_source,
+        tracks_period: raw.tracks_period,
+        first_seen: idx < 0 || periodChanged ? today : alerts[idx].first_seen,
+        last_confirmed: today,
+      };
+      if (idx >= 0) {
+        alerts[idx] = entry;
+        updatedCount++;
+      } else {
+        alerts.push(entry);
+        addedCount++;
+      }
+      continue;
+    }
+
     const id = dedupKey(raw);
     if (known.has(id)) {
       skippedCount++;
@@ -133,13 +167,21 @@ function mergeIncoming(alerts, incoming, today) {
     known.add(id);
     addedCount++;
   }
-  return { addedCount, skippedCount };
+  return { addedCount, skippedCount, updatedCount };
 }
 
-function recomputeStatus(alerts, today) {
+// data_summary 卡片不走15天衰减：只要它追踪的数据期间(tracks_period)仍是对应信源
+// (INEGI/GACC)当前的最新期间就保持active；信源更新到新的月份而这张卡片还没被刷新到
+// 新内容，就视为过期归档（正常情况下两者应该在同一次处理里一起更新，不会出现这种滞后）。
+function recomputeStatus(alerts, today, currentPeriods) {
   for (const a of alerts) {
-    const age = daysBetween(a.first_seen, today);
-    a.status = age <= RECENCY_DAYS ? 'active' : 'archived';
+    if (a.card_type === 'data_summary') {
+      const cur = currentPeriods && currentPeriods[a.tracks_source];
+      a.status = cur && a.tracks_period === cur ? 'active' : 'archived';
+    } else {
+      const age = daysBetween(a.first_seen, today);
+      a.status = age <= RECENCY_DAYS ? 'active' : 'archived';
+    }
   }
 }
 
@@ -696,8 +738,21 @@ function main() {
   let gaccTs = readJson(GACC_TS_PATH, { periods: {}, source_files: [] });
   const gaccTsIn = readJsonStrict(GACC_TS_IN_PATH, null);
 
-  const { addedCount, skippedCount } = mergeIncoming(alerts, incoming, today);
-  recomputeStatus(alerts, today);
+  // inegi/gacc 要先于 alerts 合并，因为 data_summary 类型的特殊卡片(INEGI/GACC数据摘要)
+  // 的 active/archived 状态取决于它追踪的期间是否等于这两个信源"当前"的最新期间。
+  inegi = mergeInegi(inegi, inegiIn);
+  writeJson(INEGI_PATH, inegi);
+  writeJson(INEGI_IN_PATH, { last_checked: null, latest: null, history_upserts: [] });
+
+  gacc = mergeGacc(gacc, gaccIn);
+  writeJson(GACC_PATH, gacc);
+
+  gaccTs = mergeGaccTimeseries(gaccTs, gaccTsIn);
+  writeJson(GACC_TS_PATH, gaccTs);
+
+  const currentPeriods = { inegi: inegi.latest && inegi.latest.period, gacc: gacc.latest && gacc.latest.period };
+  const { addedCount, skippedCount, updatedCount } = mergeIncoming(alerts, incoming, today);
+  recomputeStatus(alerts, today, currentPeriods);
   sortAlerts(alerts);
   writeJson(ALERTS_PATH, alerts);
   // 清空 incoming，避免重复合并
@@ -713,16 +768,6 @@ function main() {
   writeJson(META_PATH, meta);
   // meta_in 消费后清空，避免下次误用旧值（agent每次运行都应重新写入）
   writeJson(META_IN_PATH, {});
-
-  inegi = mergeInegi(inegi, inegiIn);
-  writeJson(INEGI_PATH, inegi);
-  writeJson(INEGI_IN_PATH, { last_checked: null, latest: null, history_upserts: [] });
-
-  gacc = mergeGacc(gacc, gaccIn);
-  writeJson(GACC_PATH, gacc);
-
-  gaccTs = mergeGaccTimeseries(gaccTs, gaccTsIn);
-  writeJson(GACC_TS_PATH, gaccTs);
 
   const active = alerts.filter((a) => a.status === 'active');
   const archived = alerts.filter((a) => a.status === 'archived');
@@ -805,7 +850,7 @@ function main() {
     .split('{{ARCHIVE_GROUPS}}').join(archiveGroupsHtml);
   fs.writeFileSync(path.join(SITE_DIR, 'archive.html'), archiveTemplate, 'utf8');
 
-  console.log(`合并完成：新增 ${addedCount} 条，跳过重复 ${skippedCount} 条。`);
+  console.log(`合并完成：新增 ${addedCount} 条，跳过重复 ${skippedCount} 条，更新 ${updatedCount} 条（data_summary卡片）。`);
   console.log(`当前活跃（近${RECENCY_DAYS}天）信号 ${active.length} 条，已归档 ${archived.length} 条。`);
   console.log(`版本号已更新为 v${meta.version}，更新日期 ${meta.updated_date}。`);
 }

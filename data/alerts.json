@@ -82,6 +82,36 @@
     "status": "active"
   },
   {
+    "id": "special:gacc_summary",
+    "category": "competition",
+    "severity": "yellow",
+    "severity_reason": "中国海关出口数据显示全部9个卖家相关品类在9月同比均为正增长且多数增速可观，是判断中国对墨西哥跨境电商供给端景气度的最直接一手数据，建议持续跟踪。",
+    "title_zh": "📦 GACC海关数据：9月对墨西哥出口卖家相关品类合计4.27亿美元，9个品类同比全面正增长",
+    "facts_zh": [
+      "经两道筛选（整章排除+贸易方式/关键词筛选）后，2026年9月中国对墨西哥出口中与卖家业务相关的品类合计4.268亿美元（全量未筛选总额95.97亿美元）。",
+      "品类规模前三：手机与小型电子配件9640万美元、家居装饰7543万美元、厨房与家用器皿6799万美元；玩具与模型（经人工确认HS8编码95030089单码）5989万美元。",
+      "与去年同月（2025-09）相比，9个品类同比(PCP)全部为正：小家电与清洁工具增速最快+95.6%，文具办公+82.9%，家纺+67.9%，五金工具与餐厨刀具+61.1%，家居装饰+57.5%，手机与小型电子配件+50.9%，玩具与模型+49.9%，箱包手提袋+38.6%，厨房与家用器皿+24.2%。"
+    ],
+    "source": {
+      "name": "GACC中国海关统计数据在线查询平台（人工导出，2026年9月，对墨西哥）",
+      "tier": 1,
+      "lang": "zh",
+      "url": "https://tig-mx-ecomm-intel.surge.sh/gacc.html",
+      "date": "2026-09-30"
+    },
+    "actions_zh": [
+      "小家电与清洁工具同比增速最快（+95.6%），建议评估该品类是否存在供给侵蚀迹象，考虑是否扩充SKU或提前备货。",
+      "9个品类全面正增长可作为中国对墨西哥跨境电商供给端整体仍在扩张的佐证，用于辅助判断行业景气度，而非单一品类决策依据。",
+      "下月新数据导出并处理后本卡片同步刷新；本次筛选逻辑与品类定义详见gacc.html页面方法论说明。"
+    ],
+    "card_type": "data_summary",
+    "tracks_source": "gacc",
+    "tracks_period": "2026-09",
+    "first_seen": "2026-10-21",
+    "last_confirmed": "2026-10-21",
+    "status": "active"
+  },
+  {
     "id": "url:www.jornada.com.mx/2026/10/17/economia/016n1eco",
     "category": "competition",
     "severity": "yellow",
@@ -292,6 +322,33 @@
     ],
     "first_seen": "2026-10-13",
     "last_confirmed": "2026-10-13",
+    "status": "active"
+  },
+  {
+    "id": "special:inegi_summary",
+    "category": "competition",
+    "severity": "green",
+    "severity_reason": "宏观贸易总量数据，与卖家直接相关的消费品进口分项增速明显弱于headline数字，参考价值有限，仅作宏观背景。",
+    "title_zh": "📊 INEGI月度简报：8月顺差6.05亿美元，但消费品进口增速明显落后于headline",
+    "facts_zh": [
+      "2026年8月墨西哥商品贸易顺差6.05亿美元；出口同比+40.4%，进口同比+34.2%，但该增速主要由中间品进口(+41.9%)拉动。",
+      "与跨境电商卖家更相关的\"消费品\"进口当月同比仅+8.9%（非石油类消费品+3.4%），远低于进口总量增速，说明headline贸易数据的强劲增长并不直接等同于终端消费进口需求同步放量。"
+    ],
+    "source": {
+      "name": "INEGI《墨西哥商品贸易差额》月度公报 607/26（2026年8月）",
+      "tier": 1,
+      "lang": "es",
+      "url": "https://tig-mx-ecomm-intel.surge.sh/inegi.html",
+      "date": "2026-09-28"
+    },
+    "actions_zh": [
+      "将此数据仅作宏观背景参考，不作为SKU级需求判断依据；下月（预计10月27日发布9月数据）更新后本卡片同步刷新。"
+    ],
+    "card_type": "data_summary",
+    "tracks_source": "inegi",
+    "tracks_period": "2026-08",
+    "first_seen": "2026-10-21",
+    "last_confirmed": "2026-10-21",
     "status": "active"
   },
   {

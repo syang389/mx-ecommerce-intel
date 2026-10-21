@@ -149,7 +149,11 @@
    exports_total_mdd, imports_total_mdd, balance_mdd}`），交给 `node scripts/build.js` 按 period
    去重合并（已存在的 period 会被新数值覆盖，用于捕捉"oportuna→definitiva"修订）。
 7. `data/inegi_in.json` 的 `last_checked` 设为今天。
-8. 运行 `node scripts/build.js`（与信号卡片合并是同一次调用，不需要单独跑）。
+8. **如果第1步确认 `latest.period` 有更新**，同步刷新"竞争与消费趋势"分类下的
+   `special:inegi_summary` 特殊卡片（写入 `data/incoming.json`，`tracks_period` 改成新的
+   period），具体字段要求和写法见 `COMPILER_PROMPT.md` 的"特殊卡片：INEGI/GACC数据摘要"一节。
+   没有新公报就不用动这张卡片。
+9. 运行 `node scripts/build.js`（与信号卡片、特殊卡片合并是同一次调用，不需要单独跑）。
 
 **红线：** 不得编造任何数字；如果PDF解析出的文本里某个字段缺失/模糊，就在 `narrative_highlights_zh`
 里如实说明"本期未能确认XX数值"，不要用上个月的数字填充当月字段。
@@ -184,6 +188,10 @@
 4. **人工复核输出**：打开生成的页面检查"未匹配中金额最高的20条"表格——如果看到应该归类却没被
    归类的品类（比如卖家新增了某类商品），编辑 `data/gacc_filter_rules.json`（不是脚本代码）添加
    对应的正则关键词，重新跑一遍脚本。
+5. **产出新一期数据后**，同步刷新"竞争与消费趋势"分类下的 `special:gacc_summary` 特殊卡片
+   （写入 `data/incoming.json`，`tracks_period` 改成新的period，内容基于本次最新品类占比/
+   同比数据重新撰写，比INEGI那张更详细），字段要求见 `COMPILER_PROMPT.md`。写完后再跑一次
+   `node scripts/build.js` 合并。这一步只在本按需流程里做，不属于每日cron任务范围。
 
 **筛选规则维护（`data/gacc_filter_rules.json`）：** 这份规则文件编码了"卖家实际在卖什么"这件事，
 不是针对某一个月数据硬编码的HS8清单——哪怕下个月的具体HS8编码组合完全不同，只要商品名称里的
