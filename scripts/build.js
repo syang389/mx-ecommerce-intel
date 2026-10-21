@@ -630,31 +630,65 @@ function renderGaccSection(gacc, gaccTs) {
       </div>`
     : '';
 
-  // PCP(同期比较)：当前快照月份 vs 去年同月。先算每个品类的同比，再给到每条HS8明细。
+  // PCP(同期比较)：当前快照月份 vs 去年同月。单月同比容易受季节性/单月异常波动影响，
+  // 所以额外算一个YTD(年初至今累计) vs 去年同期累计的同比作为更平滑的参照，两者并列展示。
   const periodDate = /^(\d{4})-(\d{2})$/.exec(l.period);
   const pcpPeriod = periodDate ? `${parseInt(periodDate[1], 10) - 1}-${periodDate[2]}` : null;
   const pcpPeriodData = pcpPeriod && tsPeriods[pcpPeriod] ? tsPeriods[pcpPeriod] : null;
   const pcpPct = (current, prior) => (prior > 0 ? ((current - prior) / prior) * 100 : null);
 
+  const curYear = periodDate ? periodDate[1] : null;
+  const curMonthNum = periodDate ? periodDate[2] : null;
+  const priorYear = curYear ? String(parseInt(curYear, 10) - 1) : null;
+  const curYtdPeriods = curYear ? tsPeriodKeys.filter((p) => p.startsWith(curYear + '-') && p <= l.period) : [];
+  const priorYtdPeriods = priorYear ? curYtdPeriods.map((p) => priorYear + p.slice(4)) : [];
+  const priorYtdAvailableCount = priorYtdPeriods.filter((p) => tsPeriods[p]).length;
+  // 只有当去年同期范围内每个月份都有数据时才展示YTD对比，避免用不完整的月份拼出误导性的"累计"同比
+  const ytdComparable = curYtdPeriods.length > 0 && priorYtdAvailableCount === curYtdPeriods.length;
+  const ytdRangeLabel = curYtdPeriods.length
+    ? `${curYear}年1-${parseInt(curMonthNum, 10)}月 vs ${priorYear}年1-${parseInt(curMonthNum, 10)}月`
+    : '-';
+  const ytdSumCategory = (periods, name) =>
+    periods.reduce((s, p) => s + (tsPeriods[p] && tsPeriods[p].categories[name] ? tsPeriods[p].categories[name].value_usd : 0), 0);
+  const ytdSumItem = (periods, hs8) =>
+    periods.reduce((s, p) => s + (tsPeriods[p] && tsPeriods[p].items[hs8] ? tsPeriods[p].items[hs8].value_usd : 0), 0);
+
   const detailTables = cats
     .map(([name, v]) => {
       const rows = v.items
-        .slice(0, 8)
         .map((it) => {
           const priorItem = pcpPeriodData && pcpPeriodData.items[it.hs8];
           const pct = priorItem ? pcpPct(it.value_usd, priorItem.value_usd) : null;
           const pctCell = priorItem ? (pct == null ? '-' : pctSpan(pct)) : '新增';
-          return `<tr><td>${escapeHtml(it.hs8)}</td><td>${escapeHtml(it.name_zh)}</td><td>$${fmtNum(it.value_usd, 0)}</td><td>${pctCell}</td></tr>`;
+          let ytdCell = '-';
+          if (ytdComparable) {
+            const itemYtdPrior = ytdSumItem(priorYtdPeriods, it.hs8);
+            if (itemYtdPrior > 0) {
+              const itemYtdPct = pcpPct(ytdSumItem(curYtdPeriods, it.hs8), itemYtdPrior);
+              ytdCell = itemYtdPct == null ? '-' : pctSpan(itemYtdPct);
+            } else {
+              ytdCell = '新增';
+            }
+          }
+          return `<tr><td>${escapeHtml(it.hs8)}</td><td>${escapeHtml(it.name_zh)}</td><td>$${fmtNum(it.value_usd, 0)}</td><td>${pctCell}</td><td>${ytdCell}</td></tr>`;
         })
         .join('\n            ');
       const catPrior = pcpPeriodData && pcpPeriodData.categories[name];
       const catPct = catPrior ? pcpPct(v.value_usd, catPrior.value_usd) : null;
-      const catPctLabel = catPrior ? (catPct == null ? '' : ` · PCP ${fmtPct(catPct)}`) : '';
+      const catPctLabel = catPrior ? (catPct == null ? '' : ` · 单月PCP ${fmtPct(catPct)}`) : '';
+      let catYtdLabel = '';
+      if (ytdComparable) {
+        const catYtdPrior = ytdSumCategory(priorYtdPeriods, name);
+        if (catYtdPrior > 0) {
+          const catYtdPct = pcpPct(ytdSumCategory(curYtdPeriods, name), catYtdPrior);
+          catYtdLabel = catYtdPct == null ? '' : ` · YTD PCP ${fmtPct(catYtdPct)}`;
+        }
+      }
       return `
-      <div class="card-section-label">${escapeHtml(name)} — 明细前${Math.min(8, v.items.length)}条（共${v.count}条，合计$${fmtNum(v.value_usd, 0)}${catPctLabel}）</div>
+      <div class="card-section-label">${escapeHtml(name)} — 全部${v.count}条明细（合计$${fmtNum(v.value_usd, 0)}${catPctLabel}${catYtdLabel}）</div>
       <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
         <table>
-          <thead><tr><th>HS8编码</th><th>商品名称</th><th>金额(USD)</th><th>PCP%（${escapeHtml(pcpPeriod || '-')}）</th></tr></thead>
+          <thead><tr><th>HS8编码</th><th>商品名称</th><th>金额(USD)</th><th>单月PCP%（${escapeHtml(pcpPeriod || '-')}）</th><th>YTD PCP%（${escapeHtml(ytdRangeLabel)}）</th></tr></thead>
           <tbody>
             ${rows}
           </tbody>
