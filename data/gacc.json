@@ -12,6 +12,11 @@
       "count": 3371,
       "value_usd": 7638002666
     },
+    "excluded_trade_mode": {
+      "count": 0,
+      "value_usd": 0,
+      "applied": false
+    },
     "excluded_industrial_b2b": {
       "count": 886,
       "value_usd": 4517560573
@@ -679,17 +684,23 @@
             "value_usd": 157899
           }
         ]
+      },
+      "玩具与模型（人工确认）": {
+        "count": 1,
+        "value_usd": 59885232,
+        "items": [
+          {
+            "hs8": "95030089",
+            "name_zh": "未列名玩具及模型",
+            "value_usd": 59885232
+          }
+        ]
       }
     },
     "unmatched_summary": {
-      "count": 2362,
-      "value_usd": 2753555815,
+      "count": 2361,
+      "value_usd": 2693670583,
       "top_items": [
-        {
-          "hs8": "95030089",
-          "name_zh": "未列名玩具及模型",
-          "value_usd": 59885232
-        },
         {
           "hs8": "39269090",
           "name_zh": "未列名塑料制品",
@@ -834,17 +845,22 @@
           "hs8": "85044020",
           "name_zh": "不间断供电电源",
           "value_usd": 12315374
+        },
+        {
+          "hs8": "95030083",
+          "name_zh": "带动力装置的其他玩具及模型",
+          "value_usd": 11931391
         }
       ]
     },
-    "included_total_value_usd": 366886278
+    "included_total_value_usd": 426771510
   },
   "history": [
     {
       "period": "2026-09",
       "grand_total_value_usd": 9596959188,
       "stage_a_value_usd": 7638002666,
-      "included_total_value_usd": 366886278,
+      "included_total_value_usd": 426771510,
       "categories": {
         "家居装饰": 75428505,
         "厨房与家用器皿": 67991079,
@@ -853,7 +869,8 @@
         "家纺": 13640711,
         "五金工具与餐厨刀具": 13924228,
         "小家电与清洁工具": 52668075,
-        "手机与小型电子配件": 96393868
+        "手机与小型电子配件": 96393868,
+        "玩具与模型（人工确认）": 59885232
       }
     }
   ]

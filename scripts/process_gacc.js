@@ -78,16 +78,21 @@ function loadRules() {
   }
   for (const s of raw.exclude_chapters_hs2.singles) excludeChapters.add(String(s).padStart(2, '0'));
 
+  const excludeTradeModes = new Set((raw.exclude_trade_modes && raw.exclude_trade_modes.excluded || []).map(String));
+
   const excludeFirstRegexes = raw.exclude_first_patterns.patterns.map((p) => new RegExp(p));
   const categoryRegexes = {};
   for (const [cat, patterns] of Object.entries(raw.categories)) {
     if (cat.startsWith('_')) continue;
     categoryRegexes[cat] = patterns.map((p) => new RegExp(p));
   }
-  return { excludeChapters, excludeFirstRegexes, categoryRegexes };
+  const hs8Overrides = raw.include_hs8_overrides || {};
+  return { excludeChapters, excludeTradeModes, excludeFirstRegexes, categoryRegexes, hs8Overrides };
 }
 
-function classify(name, rules) {
+function classify(hs8, name, rules) {
+  const override = rules.hs8Overrides[hs8];
+  if (override && override.category) return { status: 'included', category: override.category };
   if (rules.excludeFirstRegexes.some((re) => re.test(name))) return { status: 'excluded_industrial' };
   for (const [cat, regexes] of Object.entries(rules.categoryRegexes)) {
     if (regexes.some((re) => re.test(name))) return { status: 'included', category: cat };
@@ -117,6 +122,9 @@ function main() {
   for (const [k, v] of Object.entries(col)) {
     if (v < 0) throw new Error(`CSV表头中找不到必需列"${k}"对应的中文列名，表头可能已变化，需要人工检查：${header.join(' | ')}`);
   }
+  // 贸易方式是可选列：这次导出没选它就不勾了，不报错；下次导出时在"输出字段分组"里加选
+  // 贸易方式，这个筛选维度就会自动生效。
+  col.tradeMode = findColumn(header, ['贸易方式', '贸易方式名称', '贸易方式代码']);
 
   const dataRows = allRows.slice(1).filter((r) => r[col.hs8] && r[col.hs8].trim());
   const rules = loadRules();
@@ -137,15 +145,33 @@ function main() {
 
   const stageA = { count: stageAIncluded.length, value_usd: stageAIncluded.reduce((s, r) => s + parseValueUsd(r[col.valueUsd]), 0) };
 
+  // 贸易方式筛选（可选维度）：只有这次导出包含该列时才生效
+  let stageB = stageAIncluded;
+  let excludedTradeMode = { count: 0, value_usd: 0, applied: col.tradeMode >= 0 };
+  if (col.tradeMode >= 0) {
+    stageB = [];
+    for (const r of stageAIncluded) {
+      const cell = (r[col.tradeMode] || '').trim();
+      const codeMatch = /(\d{2})/.exec(cell);
+      const code = codeMatch ? codeMatch[1] : null;
+      if (code && rules.excludeTradeModes.has(code)) {
+        excludedTradeMode.count++;
+        excludedTradeMode.value_usd += parseValueUsd(r[col.valueUsd]);
+      } else {
+        stageB.push(r);
+      }
+    }
+  }
+
   const categories = {};
   let excludedIndustrial = { count: 0, value_usd: 0 };
   const unmatched = [];
 
-  for (const r of stageAIncluded) {
+  for (const r of stageB) {
     const hs8 = r[col.hs8].trim();
     const name = r[col.name].trim();
     const value = parseValueUsd(r[col.valueUsd]);
-    const result = classify(name, rules);
+    const result = classify(hs8, name, rules);
     if (result.status === 'excluded_industrial') {
       excludedIndustrial.count++; excludedIndustrial.value_usd += value;
     } else if (result.status === 'included') {
@@ -173,6 +199,7 @@ function main() {
     raw_file: path.relative(ROOT, csvPath),
     grand_total_all_hs8: grandTotal,
     stage_a_after_chapter_exclude: stageA,
+    excluded_trade_mode: excludedTradeMode,
     excluded_industrial_b2b: excludedIndustrial,
     categories,
     unmatched_summary: {
@@ -186,6 +213,11 @@ function main() {
   fs.writeFileSync(OUT_PATH, JSON.stringify(output, null, 2) + '\n', 'utf8');
   console.log(`处理完成：原始${grandTotal.count}条/$${grandTotal.value_usd.toFixed(0)}`);
   console.log(`整章排除后剩余${stageA.count}条/$${stageA.value_usd.toFixed(0)}`);
+  if (excludedTradeMode.applied) {
+    console.log(`贸易方式排除${excludedTradeMode.count}条/$${excludedTradeMode.value_usd.toFixed(0)}`);
+  } else {
+    console.log('本次导出未包含"贸易方式"列，未应用该筛选维度');
+  }
   console.log(`工业/B2B关键词排除${excludedIndustrial.count}条/$${excludedIndustrial.value_usd.toFixed(0)}`);
   console.log(`归入${Object.keys(categories).length}个卖家相关类目，合计${Object.values(categories).reduce((s,c)=>s+c.count,0)}条/$${includedTotal.toFixed(0)}`);
   console.log(`未匹配(需人工复核)${unmatched.length}条/$${unmatchedTotal.toFixed(0)}`);

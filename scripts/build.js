@@ -549,6 +549,9 @@ function renderGaccSection(gacc) {
           <tbody>
             <tr><td>原始全部HS8编码</td><td>${l.grand_total_all_hs8.count}</td><td>$${fmtNum(l.grand_total_all_hs8.value_usd, 0)}</td><td>人工导出的完整月度数据，未做任何筛选</td></tr>
             <tr><td>排除整章后候选</td><td>${l.stage_a_after_chapter_exclude.count}</td><td>$${fmtNum(l.stage_a_after_chapter_exclude.value_usd, 0)}</td><td>排除食品/动植物/化学药品/整车船舶飞机/武器/艺术品等整章</td></tr>
+            ${l.excluded_trade_mode && l.excluded_trade_mode.applied
+              ? `<tr><td>排除贸易方式</td><td>${l.excluded_trade_mode.count}</td><td>$${fmtNum(l.excluded_trade_mode.value_usd, 0)}</td><td>排除援助/捐赠/来料加工/边境贸易/租赁/保税区物流等非常规零售采购渠道</td></tr>`
+              : `<tr><td>排除贸易方式</td><td>-</td><td>-</td><td>本期导出未包含"贸易方式"列，未应用该筛选维度（下次导出时勾选该字段即可生效）</td></tr>`}
             <tr><td>排除工业/B2B零部件关键词</td><td>${l.excluded_industrial_b2b.count}</td><td>$${fmtNum(l.excluded_industrial_b2b.value_usd, 0)}</td><td>命中"零件/集成电路/机床/工业用"等关键词，判定为B2B工业中间品</td></tr>
             <tr style="font-weight:700;"><td>归入卖家相关品类</td><td>${Object.values(l.categories).reduce((s, c) => s + c.count, 0)}</td><td>$${fmtNum(l.included_total_value_usd, 0)}</td><td>见上方品类明细</td></tr>
             <tr><td>未匹配/待人工复核</td><td>${l.unmatched_summary.count}</td><td>$${fmtNum(l.unmatched_summary.value_usd, 0)}</td><td>既未被判定为工业品也未归入卖家品类，多为模糊/未细查品类，见下表前20条</td></tr>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>GACC中国出口数据 | MX跨境电商情报看板 | 2026-10-21 | v2.8</title>
+<title>GACC中国出口数据 | MX跨境电商情报看板 | 2026-10-21 | v2.9</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -14,7 +14,7 @@
   <div class="navbar-brand"><span class="flag">🇲🇽</span>MX跨境电商情报看板</div>
   <div class="navbar-meta">
     <span>更新至 2026-10-21</span>
-    <span>v2.8</span>
+    <span>v2.9</span>
     <span>服务对象：ML México 跨境卖家决策者</span>
   </div>
   <div class="navbar-controls">
@@ -60,8 +60,8 @@
       
       <div class="kpi-grid" style="margin-bottom:var(--spacing-lg);">
         <div class="kpi-card"><div class="kpi-value">$9.60B</div><div class="kpi-label">中国对墨出口总额（全部HS8编码，4383条）</div></div>
-        <div class="kpi-card"><div class="kpi-value">$366.9M</div><div class="kpi-label">筛选后"卖家相关品类"总额</div></div>
-        <div class="kpi-card"><div class="kpi-value">4.80%</div><div class="kpi-label">占非整章排除后候选总额之比</div></div>
+        <div class="kpi-card"><div class="kpi-value">$426.8M</div><div class="kpi-label">筛选后"卖家相关品类"总额</div></div>
+        <div class="kpi-card"><div class="kpi-value">5.59%</div><div class="kpi-label">占非整章排除后候选总额之比</div></div>
       </div>
       <div class="card-section-label">卖家相关品类占比（按筛选后金额排序）</div>
       <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
@@ -82,6 +82,12 @@
         <div class="gacc-bar-label">厨房与家用器皿 <span class="gacc-bar-count">(24条HS8编码)</span></div>
         <div class="gacc-bar-track"><div class="gacc-bar-fill" style="width:70.5%"></div></div>
         <div class="gacc-bar-value">$67,991,079</div>
+      </div>
+
+      <div class="gacc-bar-row">
+        <div class="gacc-bar-label">玩具与模型（人工确认） <span class="gacc-bar-count">(1条HS8编码)</span></div>
+        <div class="gacc-bar-track"><div class="gacc-bar-fill" style="width:62.1%"></div></div>
+        <div class="gacc-bar-value">$59,885,232</div>
       </div>
 
       <div class="gacc-bar-row">
@@ -162,6 +168,16 @@
             <tr><td>63071000</td><td>擦地布、擦碗布、抹布及类似擦拭用布</td><td>$2,656,979</td></tr>
             <tr><td>70134900</td><td>其他餐桌或厨房用玻璃器皿</td><td>$2,033,118</td></tr>
             <tr><td>73261990</td><td>经锻造或冲压的非工业用钢铁制品</td><td>$1,478,831</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card-section-label">玩具与模型（人工确认） — 明细前1条（共1条，合计$59,885,232）</div>
+      <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
+        <table>
+          <thead><tr><th>HS8编码</th><th>商品名称</th><th>金额(USD)</th></tr></thead>
+          <tbody>
+            <tr><td>95030089</td><td>未列名玩具及模型</td><td>$59,885,232</td></tr>
           </tbody>
         </table>
       </div>
@@ -256,9 +272,10 @@
           <tbody>
             <tr><td>原始全部HS8编码</td><td>4383</td><td>$9,596,959,188</td><td>人工导出的完整月度数据，未做任何筛选</td></tr>
             <tr><td>排除整章后候选</td><td>3371</td><td>$7,638,002,666</td><td>排除食品/动植物/化学药品/整车船舶飞机/武器/艺术品等整章</td></tr>
+            <tr><td>排除贸易方式</td><td>-</td><td>-</td><td>本期导出未包含"贸易方式"列，未应用该筛选维度（下次导出时勾选该字段即可生效）</td></tr>
             <tr><td>排除工业/B2B零部件关键词</td><td>886</td><td>$4,517,560,573</td><td>命中"零件/集成电路/机床/工业用"等关键词，判定为B2B工业中间品</td></tr>
-            <tr style="font-weight:700;"><td>归入卖家相关品类</td><td>123</td><td>$366,886,278</td><td>见上方品类明细</td></tr>
-            <tr><td>未匹配/待人工复核</td><td>2362</td><td>$2,753,555,815</td><td>既未被判定为工业品也未归入卖家品类，多为模糊/未细查品类，见下表前20条</td></tr>
+            <tr style="font-weight:700;"><td>归入卖家相关品类</td><td>124</td><td>$426,771,510</td><td>见上方品类明细</td></tr>
+            <tr><td>未匹配/待人工复核</td><td>2361</td><td>$2,693,670,583</td><td>既未被判定为工业品也未归入卖家品类，多为模糊/未细查品类，见下表前20条</td></tr>
           </tbody>
         </table>
       </div>
@@ -267,7 +284,6 @@
         <table>
           <thead><tr><th>HS8编码</th><th>商品名称</th><th>金额(USD)</th></tr></thead>
           <tbody>
-            <tr><td>95030089</td><td>未列名玩具及模型</td><td>$59,885,232</td></tr>
             <tr><td>39269090</td><td>未列名塑料制品</td><td>$58,476,784</td></tr>
             <tr><td>85176299</td><td>其他接收、转换并且发送或再生声音、图像或其他数据用的设备</td><td>$48,125,135</td></tr>
             <tr><td>85371090</td><td>其他电气控制或电力分配盘板台等，电压≤1000V</td><td>$47,455,535</td></tr>
@@ -287,6 +303,7 @@
             <tr><td>73089000</td><td>其他钢铁结构体；钢结构体用部件及加工钢材</td><td>$15,804,422</td></tr>
             <tr><td>52114200</td><td>棉＜85％与化纤纺色织劳动布，平米重＞200g</td><td>$15,367,759</td></tr>
             <tr><td>84818090</td><td>龙头、旋塞及类似装置</td><td>$15,026,924</td></tr>
+            <tr><td>95069119</td><td>其他健身及康复器械</td><td>$14,753,929</td></tr>
           </tbody>
         </table>
       </div>
