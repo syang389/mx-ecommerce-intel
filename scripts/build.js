@@ -17,6 +17,8 @@ const META_IN_PATH = path.join(DATA_DIR, 'meta_in.json');
 const META_PATH = path.join(DATA_DIR, 'meta.json');
 const INEGI_PATH = path.join(DATA_DIR, 'inegi.json');
 const INEGI_IN_PATH = path.join(DATA_DIR, 'inegi_in.json');
+const GACC_PATH = path.join(DATA_DIR, 'gacc.json');
+const GACC_IN_PATH = path.join(DATA_DIR, 'gacc_in.json');
 
 const RECENCY_DAYS = 15;
 
@@ -458,6 +460,136 @@ function renderInegiSection(inegi) {
       </p>`;
 }
 
+// ---------- GACC 中国出口墨西哥数据（按需人工导出+处理，非每日自动） ----------
+
+function mergeGacc(gacc, gaccIn) {
+  if (!gaccIn || !gaccIn.period) return gacc; // 本次没有新的人工处理结果
+  gacc.latest = gaccIn;
+  const history = gacc.history || (gacc.history = []);
+  const summary = {
+    period: gaccIn.period,
+    grand_total_value_usd: gaccIn.grand_total_all_hs8.value_usd,
+    stage_a_value_usd: gaccIn.stage_a_after_chapter_exclude.value_usd,
+    included_total_value_usd: gaccIn.included_total_value_usd,
+    categories: Object.fromEntries(Object.entries(gaccIn.categories).map(([k, v]) => [k, v.value_usd])),
+  };
+  const idx = history.findIndex((h) => h.period === gaccIn.period);
+  if (idx >= 0) history[idx] = summary;
+  else history.push(summary);
+  history.sort((a, b) => String(a.period).localeCompare(String(b.period)));
+  return gacc;
+}
+
+function renderGaccCategoryBar(name, value, maxValue, count) {
+  const pct = maxValue > 0 ? (value / maxValue) * 100 : 0;
+  return `
+      <div class="gacc-bar-row">
+        <div class="gacc-bar-label">${escapeHtml(name)} <span class="gacc-bar-count">(${count}条HS8编码)</span></div>
+        <div class="gacc-bar-track"><div class="gacc-bar-fill" style="width:${pct.toFixed(1)}%"></div></div>
+        <div class="gacc-bar-value">$${fmtNum(value, 0)}</div>
+      </div>`;
+}
+
+function renderGaccSection(gacc) {
+  if (!gacc || !gacc.latest) {
+    return `
+      <div class="section-title">🇨🇳 GACC 中国出口墨西哥数据</div>
+      <div class="section-subtitle">尚未处理任何人工导出的月度数据。</div>`;
+  }
+  const l = gacc.latest;
+  const cats = Object.entries(l.categories).sort((a, b) => b[1].value_usd - a[1].value_usd);
+  const maxCatValue = cats.length ? cats[0][1].value_usd : 0;
+
+  const asOfBanner = `
+      <div class="top-signal-box" style="margin-bottom:var(--spacing-lg);">
+        <h3>数据时效说明</h3>
+        <p>
+          数据期间：<b>${escapeHtml(l.period)}</b>（中国海关统计，贸易伙伴：${escapeHtml(l.partner)}）
+          · 信源：${escapeHtml(l.source_note)}
+          · 原始文件：<code>${escapeHtml(l.raw_file)}</code>
+          <br/>本页<b>不在每日自动更新范围内</b>——GACC查询平台需要人工登录+验证码查询+导出，
+          当你提供新一期（通常按月）导出文件后才会刷新。
+        </p>
+      </div>`;
+
+  const kpi = `
+      <div class="kpi-grid" style="margin-bottom:var(--spacing-lg);">
+        <div class="kpi-card"><div class="kpi-value">$${fmtNum(l.grand_total_all_hs8.value_usd / 1e9, 2)}B</div><div class="kpi-label">中国对墨出口总额（全部HS8编码，${l.grand_total_all_hs8.count}条）</div></div>
+        <div class="kpi-card"><div class="kpi-value">$${fmtNum(l.included_total_value_usd / 1e6, 1)}M</div><div class="kpi-label">筛选后"卖家相关品类"总额</div></div>
+        <div class="kpi-card"><div class="kpi-value">${((l.included_total_value_usd / l.stage_a_after_chapter_exclude.value_usd) * 100).toFixed(2)}%</div><div class="kpi-label">占非整章排除后候选总额之比</div></div>
+      </div>`;
+
+  const bars = cats.map(([name, v]) => renderGaccCategoryBar(name, v.value_usd, maxCatValue, v.count)).join('\n');
+
+  const detailTables = cats
+    .map(([name, v]) => {
+      const rows = v.items
+        .slice(0, 8)
+        .map((it) => `<tr><td>${escapeHtml(it.hs8)}</td><td>${escapeHtml(it.name_zh)}</td><td>$${fmtNum(it.value_usd, 0)}</td></tr>`)
+        .join('\n            ');
+      return `
+      <div class="card-section-label">${escapeHtml(name)} — 明细前${Math.min(8, v.items.length)}条（共${v.count}条，合计$${fmtNum(v.value_usd, 0)}）</div>
+      <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
+        <table>
+          <thead><tr><th>HS8编码</th><th>商品名称</th><th>金额(USD)</th></tr></thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      </div>`;
+    })
+    .join('\n');
+
+  const unmatchedRows = (l.unmatched_summary.top_items || [])
+    .slice(0, 20)
+    .map((it) => `<tr><td>${escapeHtml(it.hs8)}</td><td>${escapeHtml(it.name_zh)}</td><td>$${fmtNum(it.value_usd, 0)}</td></tr>`)
+    .join('\n            ');
+
+  const transparency = `
+      <div class="card-section-label">筛选过程透明度（供审计/复核）</div>
+      <div class="table-wrap" style="margin-bottom:var(--spacing-md);">
+        <table>
+          <thead><tr><th>阶段</th><th>条数</th><th>金额</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>原始全部HS8编码</td><td>${l.grand_total_all_hs8.count}</td><td>$${fmtNum(l.grand_total_all_hs8.value_usd, 0)}</td><td>人工导出的完整月度数据，未做任何筛选</td></tr>
+            <tr><td>排除整章后候选</td><td>${l.stage_a_after_chapter_exclude.count}</td><td>$${fmtNum(l.stage_a_after_chapter_exclude.value_usd, 0)}</td><td>排除食品/动植物/化学药品/整车船舶飞机/武器/艺术品等整章</td></tr>
+            <tr><td>排除工业/B2B零部件关键词</td><td>${l.excluded_industrial_b2b.count}</td><td>$${fmtNum(l.excluded_industrial_b2b.value_usd, 0)}</td><td>命中"零件/集成电路/机床/工业用"等关键词，判定为B2B工业中间品</td></tr>
+            <tr style="font-weight:700;"><td>归入卖家相关品类</td><td>${Object.values(l.categories).reduce((s, c) => s + c.count, 0)}</td><td>$${fmtNum(l.included_total_value_usd, 0)}</td><td>见上方品类明细</td></tr>
+            <tr><td>未匹配/待人工复核</td><td>${l.unmatched_summary.count}</td><td>$${fmtNum(l.unmatched_summary.value_usd, 0)}</td><td>既未被判定为工业品也未归入卖家品类，多为模糊/未细查品类，见下表前20条</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-section-label">未匹配中金额最高的20条（如果其中有应归类的品类，请告知调整规则）</div>
+      <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
+        <table>
+          <thead><tr><th>HS8编码</th><th>商品名称</th><th>金额(USD)</th></tr></thead>
+          <tbody>
+            ${unmatchedRows}
+          </tbody>
+        </table>
+      </div>`;
+
+  return `
+      <div class="section-title">🇨🇳 GACC 中国出口墨西哥数据</div>
+      <div class="section-subtitle">中国海关统计数据在线查询平台（人工导出）· HS8位颗粒度 · 已按卖家实际SKU范围筛选 · 专题区域，独立于上方信号卡片体系</div>
+      ${asOfBanner}
+      ${kpi}
+      <div class="card-section-label">卖家相关品类占比（按筛选后金额排序）</div>
+      <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
+        ${bars}
+      </div>
+      ${detailTables}
+      ${transparency}
+      <p style="color:var(--text-secondary); font-size:13px;">
+        筛选规则：先排除与卖家业务完全无关的HS章节（食品/动植物/化学药品/整车船舶飞机/武器/艺术品），
+        再排除明显的工业原料/B2B零部件关键词，剩余候选按卖家实际品类（厨房与家用器皿/家纺/家居装饰/
+        手机与小型电子配件/小家电与清洁工具/箱包手提袋/文具办公/五金工具与餐厨刀具）关键词归类。
+        规则定义在仓库 <code>data/gacc_filter_rules.json</code>，按月复核更新，不是固定不变的HS编码清单。
+        玩具、平板电脑/游戏主机配件、金属家具等品类因存在认证要求或与卖家描述品类不完全一致，本期未纳入，
+        如需调整请告知。
+      </p>`;
+}
+
 function bumpVersion(v) {
   const n = parseFloat(v);
   if (isNaN(n)) return '1.0';
@@ -473,6 +605,8 @@ function main() {
   const prevMeta = readJson(META_PATH, { version: '1.0', usd_mxn: '-', usd_mxn_date: '-', top_summary_zh: '' });
   let inegi = readJson(INEGI_PATH, { last_checked: null, latest: null, history: [] });
   const inegiIn = readJsonStrict(INEGI_IN_PATH, { last_checked: null, latest: null, history_upserts: [] });
+  let gacc = readJson(GACC_PATH, { latest: null, history: [] });
+  const gaccIn = readJsonStrict(GACC_IN_PATH, null);
 
   const { addedCount, skippedCount } = mergeIncoming(alerts, incoming, today);
   recomputeStatus(alerts, today);
@@ -495,6 +629,9 @@ function main() {
   inegi = mergeInegi(inegi, inegiIn);
   writeJson(INEGI_PATH, inegi);
   writeJson(INEGI_IN_PATH, { last_checked: null, latest: null, history_upserts: [] });
+
+  gacc = mergeGacc(gacc, gaccIn);
+  writeJson(GACC_PATH, gacc);
 
   const active = alerts.filter((a) => a.status === 'active');
   const archived = alerts.filter((a) => a.status === 'archived');
@@ -519,6 +656,7 @@ function main() {
     TOP_SUMMARY: fmt(meta.top_summary_zh),
     INEGI_TOP_KPI: renderInegiTopKpi(inegi, 'inegi.html'),
     INEGI_SECTION: renderInegiSection(inegi),
+    GACC_SECTION: renderGaccSection(gacc),
   };
 
   for (const cat of CATEGORIES) {
@@ -546,6 +684,13 @@ function main() {
     inegiTemplate = inegiTemplate.split('{{' + key + '}}').join(val);
   }
   fs.writeFileSync(path.join(SITE_DIR, 'inegi.html'), inegiTemplate, 'utf8');
+
+  // gacc.html（同样复用 replacements，独立页面展示GACC人工导出+筛选后的数据）
+  let gaccTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'gacc.template.html'), 'utf8');
+  for (const [key, val] of Object.entries(replacements)) {
+    gaccTemplate = gaccTemplate.split('{{' + key + '}}').join(val);
+  }
+  fs.writeFileSync(path.join(SITE_DIR, 'gacc.html'), gaccTemplate, 'utf8');
 
   // archive.html
   let archiveTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'archive.template.html'), 'utf8');

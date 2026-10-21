@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>MX跨境电商情报看板 | 2026-10-21 | v2.5</title>
+<title>MX跨境电商情报看板 | 2026-10-21 | v2.7</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -14,7 +14,7 @@
   <div class="navbar-brand"><span class="flag">🇲🇽</span>MX跨境电商情报看板</div>
   <div class="navbar-meta">
     <span>更新至 2026-10-21</span>
-    <span>v2.5</span>
+    <span>v2.7</span>
     <span>服务对象：ML México 跨境卖家决策者</span>
   </div>
   <div class="navbar-controls">
@@ -40,6 +40,7 @@
 
       <li class="sidebar-section-title" style="margin-top:12px;">官方统计专题</li>
       <li><a class="sidebar-item" href="inegi.html">📊 INEGI外贸统计</a></li>
+      <li><a class="sidebar-item" href="gacc.html">🇨🇳 GACC中国出口数据</a></li>
 
       <li class="sidebar-section-title" style="margin-top:12px;">方法论</li>
       <li><a class="sidebar-item" href="#sources">数据源监控清单</a></li>
@@ -449,6 +450,7 @@
             <tr><td>平台政策</td><td>ML佣金公告 / 卖家社区</td><td>每日检索</td><td>WebSearch + WebFetch</td><td class="status-ok">✅ 自动</td></tr>
             <tr><td>竞争与消费趋势</td><td>财经媒体 / 竞品动态报道</td><td>每日检索</td><td>WebSearch + WebFetch</td><td class="status-ok">✅ 自动</td></tr>
             <tr><td>INEGI外贸统计（<a href="inegi.html">独立专题页</a>）</td><td>INEGI《墨西哥商品贸易差额》月度公报</td><td>每日核查是否有新公报 / 月度实际更新</td><td>WebSearch定位公报 → 下载PDF到本地 → Node脚本解析 → 人工/LLM转录</td><td class="status-ok">✅ 自动</td></tr>
+            <tr><td>GACC中国出口数据（<a href="gacc.html">独立专题页</a>）</td><td>中国海关统计数据在线查询平台（人工导出）</td><td>按需 / 通常月度</td><td>人工登录+验证码导出CSV → Node脚本筛选分类 → 人工复核</td><td class="status-semi">⏸ 人工触发</td></tr>
           </tbody>
         </table>
       </div>
