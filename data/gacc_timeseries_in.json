@@ -1,0 +1,897 @@
+{
+  "source_files": [
+    "data/gacc_raw/export5_raw.csv",
+    "data/gacc_raw/export6_raw.csv"
+  ],
+  "coverage": {
+    "start_period": "2025-01",
+    "end_period": "2026-09",
+    "months": 21
+  },
+  "periods": {
+    "2025-01": {
+      "categories": {
+        "家居装饰": {
+          "count": 38,
+          "value_usd": 58171794
+        },
+        "厨房与家用器皿": {
+          "count": 42,
+          "value_usd": 81965219
+        },
+        "文具办公": {
+          "count": 14,
+          "value_usd": 4577108
+        },
+        "箱包手提袋": {
+          "count": 22,
+          "value_usd": 49492348
+        },
+        "家纺": {
+          "count": 28,
+          "value_usd": 12351233
+        },
+        "五金工具与餐厨刀具": {
+          "count": 31,
+          "value_usd": 16190468
+        },
+        "小家电与清洁工具": {
+          "count": 35,
+          "value_usd": 57150097
+        },
+        "手机与小型电子配件": {
+          "count": 21,
+          "value_usd": 103983118
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 52008616
+        }
+      },
+      "total_value_usd": 435890001,
+      "row_count": 234
+    },
+    "2025-02": {
+      "categories": {
+        "家居装饰": {
+          "count": 36,
+          "value_usd": 31204063
+        },
+        "厨房与家用器皿": {
+          "count": 37,
+          "value_usd": 32937524
+        },
+        "文具办公": {
+          "count": 13,
+          "value_usd": 2510247
+        },
+        "箱包手提袋": {
+          "count": 16,
+          "value_usd": 24463850
+        },
+        "家纺": {
+          "count": 26,
+          "value_usd": 5226151
+        },
+        "五金工具与餐厨刀具": {
+          "count": 28,
+          "value_usd": 5022647
+        },
+        "小家电与清洁工具": {
+          "count": 34,
+          "value_usd": 24293228
+        },
+        "手机与小型电子配件": {
+          "count": 22,
+          "value_usd": 47247854
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 19023698
+        }
+      },
+      "total_value_usd": 191929262,
+      "row_count": 215
+    },
+    "2025-03": {
+      "categories": {
+        "家居装饰": {
+          "count": 39,
+          "value_usd": 53467593
+        },
+        "厨房与家用器皿": {
+          "count": 40,
+          "value_usd": 68818327
+        },
+        "文具办公": {
+          "count": 12,
+          "value_usd": 4649051
+        },
+        "箱包手提袋": {
+          "count": 16,
+          "value_usd": 49280031
+        },
+        "家纺": {
+          "count": 28,
+          "value_usd": 7300154
+        },
+        "五金工具与餐厨刀具": {
+          "count": 29,
+          "value_usd": 10185349
+        },
+        "小家电与清洁工具": {
+          "count": 35,
+          "value_usd": 53305965
+        },
+        "手机与小型电子配件": {
+          "count": 22,
+          "value_usd": 90635371
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 44988739
+        }
+      },
+      "total_value_usd": 382630580,
+      "row_count": 224
+    },
+    "2025-04": {
+      "categories": {
+        "家居装饰": {
+          "count": 36,
+          "value_usd": 60192686
+        },
+        "厨房与家用器皿": {
+          "count": 42,
+          "value_usd": 73620063
+        },
+        "文具办公": {
+          "count": 11,
+          "value_usd": 6670771
+        },
+        "箱包手提袋": {
+          "count": 19,
+          "value_usd": 54038356
+        },
+        "家纺": {
+          "count": 28,
+          "value_usd": 7195932
+        },
+        "五金工具与餐厨刀具": {
+          "count": 27,
+          "value_usd": 11872531
+        },
+        "小家电与清洁工具": {
+          "count": 38,
+          "value_usd": 40946743
+        },
+        "手机与小型电子配件": {
+          "count": 22,
+          "value_usd": 60098389
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 36521183
+        }
+      },
+      "total_value_usd": 351156654,
+      "row_count": 226
+    },
+    "2025-05": {
+      "categories": {
+        "家居装饰": {
+          "count": 36,
+          "value_usd": 78007263
+        },
+        "厨房与家用器皿": {
+          "count": 41,
+          "value_usd": 70891206
+        },
+        "文具办公": {
+          "count": 13,
+          "value_usd": 4322844
+        },
+        "箱包手提袋": {
+          "count": 18,
+          "value_usd": 47706834
+        },
+        "家纺": {
+          "count": 28,
+          "value_usd": 8223632
+        },
+        "五金工具与餐厨刀具": {
+          "count": 29,
+          "value_usd": 11254765
+        },
+        "小家电与清洁工具": {
+          "count": 36,
+          "value_usd": 33420529
+        },
+        "手机与小型电子配件": {
+          "count": 22,
+          "value_usd": 69258966
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 53052918
+        }
+      },
+      "total_value_usd": 376138957,
+      "row_count": 226
+    },
+    "2025-06": {
+      "categories": {
+        "家居装饰": {
+          "count": 37,
+          "value_usd": 112568095
+        },
+        "厨房与家用器皿": {
+          "count": 43,
+          "value_usd": 73623629
+        },
+        "文具办公": {
+          "count": 12,
+          "value_usd": 4227436
+        },
+        "箱包手提袋": {
+          "count": 20,
+          "value_usd": 37261805
+        },
+        "家纺": {
+          "count": 28,
+          "value_usd": 8825758
+        },
+        "五金工具与餐厨刀具": {
+          "count": 27,
+          "value_usd": 11344547
+        },
+        "小家电与清洁工具": {
+          "count": 33,
+          "value_usd": 31425904
+        },
+        "手机与小型电子配件": {
+          "count": 21,
+          "value_usd": 59512174
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 66916523
+        }
+      },
+      "total_value_usd": 405705871,
+      "row_count": 224
+    },
+    "2025-07": {
+      "categories": {
+        "家居装饰": {
+          "count": 34,
+          "value_usd": 122085145
+        },
+        "厨房与家用器皿": {
+          "count": 46,
+          "value_usd": 69556683
+        },
+        "文具办公": {
+          "count": 11,
+          "value_usd": 3530110
+        },
+        "箱包手提袋": {
+          "count": 22,
+          "value_usd": 37595524
+        },
+        "家纺": {
+          "count": 28,
+          "value_usd": 12724842
+        },
+        "五金工具与餐厨刀具": {
+          "count": 31,
+          "value_usd": 10757979
+        },
+        "小家电与清洁工具": {
+          "count": 36,
+          "value_usd": 35468638
+        },
+        "手机与小型电子配件": {
+          "count": 20,
+          "value_usd": 69522058
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 77933578
+        }
+      },
+      "total_value_usd": 439174557,
+      "row_count": 231
+    },
+    "2025-08": {
+      "categories": {
+        "家居装饰": {
+          "count": 38,
+          "value_usd": 89394953
+        },
+        "厨房与家用器皿": {
+          "count": 45,
+          "value_usd": 64844469
+        },
+        "文具办公": {
+          "count": 12,
+          "value_usd": 2898477
+        },
+        "箱包手提袋": {
+          "count": 21,
+          "value_usd": 34292572
+        },
+        "家纺": {
+          "count": 28,
+          "value_usd": 12588286
+        },
+        "五金工具与餐厨刀具": {
+          "count": 30,
+          "value_usd": 11491247
+        },
+        "小家电与清洁工具": {
+          "count": 37,
+          "value_usd": 34520751
+        },
+        "手机与小型电子配件": {
+          "count": 22,
+          "value_usd": 94651859
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 69467578
+        }
+      },
+      "total_value_usd": 414150192,
+      "row_count": 236
+    },
+    "2025-09": {
+      "categories": {
+        "家居装饰": {
+          "count": 35,
+          "value_usd": 47890750
+        },
+        "厨房与家用器皿": {
+          "count": 40,
+          "value_usd": 54751364
+        },
+        "文具办公": {
+          "count": 10,
+          "value_usd": 2039358
+        },
+        "箱包手提袋": {
+          "count": 21,
+          "value_usd": 31099401
+        },
+        "家纺": {
+          "count": 27,
+          "value_usd": 8126613
+        },
+        "五金工具与餐厨刀具": {
+          "count": 28,
+          "value_usd": 8644130
+        },
+        "小家电与清洁工具": {
+          "count": 36,
+          "value_usd": 26925317
+        },
+        "手机与小型电子配件": {
+          "count": 21,
+          "value_usd": 63880443
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 39961309
+        }
+      },
+      "total_value_usd": 283318685,
+      "row_count": 221
+    },
+    "2025-10": {
+      "categories": {
+        "家居装饰": {
+          "count": 37,
+          "value_usd": 38396971
+        },
+        "厨房与家用器皿": {
+          "count": 42,
+          "value_usd": 52463186
+        },
+        "文具办公": {
+          "count": 12,
+          "value_usd": 2164805
+        },
+        "箱包手提袋": {
+          "count": 23,
+          "value_usd": 31556818
+        },
+        "家纺": {
+          "count": 27,
+          "value_usd": 7387932
+        },
+        "五金工具与餐厨刀具": {
+          "count": 32,
+          "value_usd": 10066830
+        },
+        "小家电与清洁工具": {
+          "count": 34,
+          "value_usd": 27326022
+        },
+        "手机与小型电子配件": {
+          "count": 22,
+          "value_usd": 73861785
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 26840235
+        }
+      },
+      "total_value_usd": 270064584,
+      "row_count": 232
+    },
+    "2025-11": {
+      "categories": {
+        "家居装饰": {
+          "count": 36,
+          "value_usd": 47448632
+        },
+        "厨房与家用器皿": {
+          "count": 44,
+          "value_usd": 62582174
+        },
+        "文具办公": {
+          "count": 13,
+          "value_usd": 2582995
+        },
+        "箱包手提袋": {
+          "count": 23,
+          "value_usd": 30278584
+        },
+        "家纺": {
+          "count": 28,
+          "value_usd": 4827594
+        },
+        "五金工具与餐厨刀具": {
+          "count": 29,
+          "value_usd": 11219045
+        },
+        "小家电与清洁工具": {
+          "count": 35,
+          "value_usd": 33336854
+        },
+        "手机与小型电子配件": {
+          "count": 21,
+          "value_usd": 76495806
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 28201314
+        }
+      },
+      "total_value_usd": 296972998,
+      "row_count": 232
+    },
+    "2025-12": {
+      "categories": {
+        "家居装饰": {
+          "count": 37,
+          "value_usd": 50792050
+        },
+        "厨房与家用器皿": {
+          "count": 39,
+          "value_usd": 54590664
+        },
+        "文具办公": {
+          "count": 12,
+          "value_usd": 2565563
+        },
+        "箱包手提袋": {
+          "count": 19,
+          "value_usd": 34747229
+        },
+        "家纺": {
+          "count": 26,
+          "value_usd": 6042629
+        },
+        "五金工具与餐厨刀具": {
+          "count": 35,
+          "value_usd": 12084751
+        },
+        "小家电与清洁工具": {
+          "count": 34,
+          "value_usd": 30782238
+        },
+        "手机与小型电子配件": {
+          "count": 21,
+          "value_usd": 94167453
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 31035819
+        }
+      },
+      "total_value_usd": 316808396,
+      "row_count": 226
+    },
+    "2026-01": {
+      "categories": {
+        "家居装饰": {
+          "count": 36,
+          "value_usd": 56259469
+        },
+        "厨房与家用器皿": {
+          "count": 45,
+          "value_usd": 70602885
+        },
+        "文具办公": {
+          "count": 11,
+          "value_usd": 4727844
+        },
+        "箱包手提袋": {
+          "count": 21,
+          "value_usd": 47240139
+        },
+        "家纺": {
+          "count": 27,
+          "value_usd": 5479768
+        },
+        "五金工具与餐厨刀具": {
+          "count": 33,
+          "value_usd": 13499278
+        },
+        "小家电与清洁工具": {
+          "count": 47,
+          "value_usd": 46100563
+        },
+        "手机与小型电子配件": {
+          "count": 22,
+          "value_usd": 106860805
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 36075553
+        }
+      },
+      "total_value_usd": 386846304,
+      "row_count": 245
+    },
+    "2026-02": {
+      "categories": {
+        "家居装饰": {
+          "count": 37,
+          "value_usd": 47709620
+        },
+        "厨房与家用器皿": {
+          "count": 42,
+          "value_usd": 58165104
+        },
+        "文具办公": {
+          "count": 11,
+          "value_usd": 3197380
+        },
+        "箱包手提袋": {
+          "count": 20,
+          "value_usd": 39200572
+        },
+        "家纺": {
+          "count": 29,
+          "value_usd": 5878907
+        },
+        "五金工具与餐厨刀具": {
+          "count": 33,
+          "value_usd": 11837527
+        },
+        "小家电与清洁工具": {
+          "count": 43,
+          "value_usd": 41965866
+        },
+        "手机与小型电子配件": {
+          "count": 22,
+          "value_usd": 52580160
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 27807156
+        }
+      },
+      "total_value_usd": 288342292,
+      "row_count": 240
+    },
+    "2026-03": {
+      "categories": {
+        "家居装饰": {
+          "count": 38,
+          "value_usd": 28815831
+        },
+        "厨房与家用器皿": {
+          "count": 38,
+          "value_usd": 42958476
+        },
+        "文具办公": {
+          "count": 11,
+          "value_usd": 2897110
+        },
+        "箱包手提袋": {
+          "count": 20,
+          "value_usd": 23138229
+        },
+        "家纺": {
+          "count": 26,
+          "value_usd": 2991869
+        },
+        "五金工具与餐厨刀具": {
+          "count": 29,
+          "value_usd": 7201688
+        },
+        "小家电与清洁工具": {
+          "count": 43,
+          "value_usd": 35994746
+        },
+        "手机与小型电子配件": {
+          "count": 21,
+          "value_usd": 67606718
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 21093522
+        }
+      },
+      "total_value_usd": 232698189,
+      "row_count": 229
+    },
+    "2026-04": {
+      "categories": {
+        "家居装饰": {
+          "count": 33,
+          "value_usd": 48031339
+        },
+        "厨房与家用器皿": {
+          "count": 34,
+          "value_usd": 58046562
+        },
+        "文具办公": {
+          "count": 12,
+          "value_usd": 4960801
+        },
+        "箱包手提袋": {
+          "count": 16,
+          "value_usd": 40921601
+        },
+        "家纺": {
+          "count": 28,
+          "value_usd": 5449874
+        },
+        "五金工具与餐厨刀具": {
+          "count": 34,
+          "value_usd": 11560169
+        },
+        "小家电与清洁工具": {
+          "count": 45,
+          "value_usd": 48080157
+        },
+        "手机与小型电子配件": {
+          "count": 21,
+          "value_usd": 76777814
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 32293650
+        }
+      },
+      "total_value_usd": 326121967,
+      "row_count": 226
+    },
+    "2026-05": {
+      "categories": {
+        "家居装饰": {
+          "count": 35,
+          "value_usd": 55886563
+        },
+        "厨房与家用器皿": {
+          "count": 35,
+          "value_usd": 51850874
+        },
+        "文具办公": {
+          "count": 12,
+          "value_usd": 4828816
+        },
+        "箱包手提袋": {
+          "count": 23,
+          "value_usd": 42518492
+        },
+        "家纺": {
+          "count": 30,
+          "value_usd": 7027420
+        },
+        "五金工具与餐厨刀具": {
+          "count": 35,
+          "value_usd": 12196531
+        },
+        "小家电与清洁工具": {
+          "count": 41,
+          "value_usd": 41880534
+        },
+        "手机与小型电子配件": {
+          "count": 22,
+          "value_usd": 61349467
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 28292401
+        }
+      },
+      "total_value_usd": 305831098,
+      "row_count": 236
+    },
+    "2026-06": {
+      "categories": {
+        "家居装饰": {
+          "count": 36,
+          "value_usd": 108166212
+        },
+        "厨房与家用器皿": {
+          "count": 38,
+          "value_usd": 73649021
+        },
+        "文具办公": {
+          "count": 11,
+          "value_usd": 4190204
+        },
+        "箱包手提袋": {
+          "count": 20,
+          "value_usd": 39275201
+        },
+        "家纺": {
+          "count": 32,
+          "value_usd": 9203448
+        },
+        "五金工具与餐厨刀具": {
+          "count": 33,
+          "value_usd": 11906631
+        },
+        "小家电与清洁工具": {
+          "count": 45,
+          "value_usd": 51515388
+        },
+        "手机与小型电子配件": {
+          "count": 23,
+          "value_usd": 75831391
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 55500988
+        }
+      },
+      "total_value_usd": 429238484,
+      "row_count": 241
+    },
+    "2026-07": {
+      "categories": {
+        "家居装饰": {
+          "count": 34,
+          "value_usd": 105147610
+        },
+        "厨房与家用器皿": {
+          "count": 37,
+          "value_usd": 56635832
+        },
+        "文具办公": {
+          "count": 10,
+          "value_usd": 2509229
+        },
+        "箱包手提袋": {
+          "count": 23,
+          "value_usd": 29562003
+        },
+        "家纺": {
+          "count": 29,
+          "value_usd": 10622541
+        },
+        "五金工具与餐厨刀具": {
+          "count": 29,
+          "value_usd": 11279160
+        },
+        "小家电与清洁工具": {
+          "count": 46,
+          "value_usd": 49413131
+        },
+        "手机与小型电子配件": {
+          "count": 22,
+          "value_usd": 90649637
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 49850110
+        }
+      },
+      "total_value_usd": 405669253,
+      "row_count": 233
+    },
+    "2026-08": {
+      "categories": {
+        "家居装饰": {
+          "count": 35,
+          "value_usd": 110464501
+        },
+        "厨房与家用器皿": {
+          "count": 35,
+          "value_usd": 56146605
+        },
+        "文具办公": {
+          "count": 11,
+          "value_usd": 2055822
+        },
+        "箱包手提袋": {
+          "count": 17,
+          "value_usd": 29098920
+        },
+        "家纺": {
+          "count": 27,
+          "value_usd": 12217100
+        },
+        "五金工具与餐厨刀具": {
+          "count": 29,
+          "value_usd": 10453448
+        },
+        "小家电与清洁工具": {
+          "count": 47,
+          "value_usd": 43633574
+        },
+        "手机与小型电子配件": {
+          "count": 21,
+          "value_usd": 65820640
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 61761611
+        }
+      },
+      "total_value_usd": 391652221,
+      "row_count": 225
+    },
+    "2026-09": {
+      "categories": {
+        "家居装饰": {
+          "count": 36,
+          "value_usd": 73968024
+        },
+        "厨房与家用器皿": {
+          "count": 36,
+          "value_usd": 66776380
+        },
+        "文具办公": {
+          "count": 12,
+          "value_usd": 3683553
+        },
+        "箱包手提袋": {
+          "count": 21,
+          "value_usd": 41553877
+        },
+        "家纺": {
+          "count": 29,
+          "value_usd": 13519729
+        },
+        "五金工具与餐厨刀具": {
+          "count": 31,
+          "value_usd": 12759110
+        },
+        "小家电与清洁工具": {
+          "count": 44,
+          "value_usd": 49373416
+        },
+        "手机与小型电子配件": {
+          "count": 21,
+          "value_usd": 80875890
+        },
+        "玩具与模型（人工确认）": {
+          "count": 3,
+          "value_usd": 58627844
+        }
+      },
+      "total_value_usd": 401137823,
+      "row_count": 233
+    }
+  },
+  "unclassified_count": 0,
+  "unclassified_sample": []
+}

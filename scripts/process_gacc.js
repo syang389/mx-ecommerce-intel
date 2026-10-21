@@ -1,104 +1,19 @@
 #!/usr/bin/env node
-// 处理手动从 GACC（中国海关统计数据在线查询平台）导出的月度CSV（中国->墨西哥，HS8位）。
+// 处理手动从 GACC（中国海关统计数据在线查询平台）导出的单期全量快照CSV（所有HS8编码，用于审计/透明度基准）。
 // 用法：node scripts/process_gacc.js <原始CSV路径> <期间如2026-09>
-// 输出：覆盖写入 data/gacc_in.json，供 node scripts/build.js 合并进持久台账 data/gacc.json。
+// 输出：覆盖写入 data/gacc_in.json，供 node scripts/build.js 合并进持久台账 data/gacc.json 的 latest 字段。
 //
-// 设计原则（见用户要求"不要硬编码，数据格式可能变化"）：
-// 1. 编码自动判断：优先尝试UTF-8，解码结果含大量乱码特征时改用GB18030（该平台历史导出一直是GBK系编码，
-//    但不假设未来一定如此）。
-// 2. CSV解析按表头名称匹配列（贸易伙伴名称/商品编码/商品名称/美元），不依赖固定列序号——
-//    平台导出字段顺序或新增列不会导致错位，缺失必需字段会直接报错退出，不会静默错位。
-// 3. 筛选/归类规则来自 data/gacc_filter_rules.json（数据文件，不是代码里的硬编码常量），
-//    每月处理时效果不理想可以直接编辑该文件调整规则，不需要改这个脚本。
+// 这个脚本适用于"全量未筛选"的单月导出（商品字段选了全部HS8，不是只选我们124个相关编码），
+// 用来展示完整的筛选过程（排除了多少工业品、还有多少未匹配）。如果导出已经按124个已知相关编码
+// 筛选过（只有相关品类，没有可排除的工业品可展示），用 scripts/process_gacc_timeseries.js 处理。
+//
+// 解析/分类的共享逻辑在 scripts/lib_gacc.js。
 
 const fs = require('fs');
 const path = require('path');
+const lib = require('./lib_gacc');
 
-const ROOT = path.resolve(__dirname, '..');
-const RULES_PATH = path.join(ROOT, 'data', 'gacc_filter_rules.json');
-const OUT_PATH = path.join(ROOT, 'data', 'gacc_in.json');
-
-function readRawText(filePath) {
-  const buf = fs.readFileSync(filePath);
-  const utf8 = new TextDecoder('utf-8', { fatal: false }).decode(buf);
-  const replacementCount = (utf8.match(/�/g) || []).length;
-  if (replacementCount > 5) {
-    console.error(`UTF-8解码发现${replacementCount}个替换字符，改用GB18030重新解码`);
-    return new TextDecoder('gb18030').decode(buf);
-  }
-  return utf8;
-}
-
-// 最小化、正确处理引号转义的CSV解析（字段内可能包含逗号，如金额"22,639"）
-function parseCsv(text) {
-  const rows = [];
-  let row = [];
-  let field = '';
-  let inQuotes = false;
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i];
-    if (inQuotes) {
-      if (c === '"') {
-        if (text[i + 1] === '"') { field += '"'; i++; }
-        else inQuotes = false;
-      } else field += c;
-    } else {
-      if (c === '"') inQuotes = true;
-      else if (c === ',') { row.push(field); field = ''; }
-      else if (c === '\n' || c === '\r') {
-        if (c === '\r' && text[i + 1] === '\n') i++;
-        row.push(field); field = '';
-        if (row.some((x) => x !== '')) rows.push(row);
-        row = [];
-      } else field += c;
-    }
-  }
-  if (field !== '' || row.length) { row.push(field); rows.push(row); }
-  return rows;
-}
-
-function findColumn(header, candidates) {
-  for (const cand of candidates) {
-    const idx = header.findIndex((h) => h.trim() === cand);
-    if (idx >= 0) return idx;
-  }
-  return -1;
-}
-
-function parseValueUsd(s) {
-  const n = parseFloat(String(s).replace(/,/g, ''));
-  return isNaN(n) ? 0 : n;
-}
-
-function loadRules() {
-  const raw = JSON.parse(fs.readFileSync(RULES_PATH, 'utf8'));
-  const excludeChapters = new Set();
-  for (const [a, b] of raw.exclude_chapters_hs2.ranges) {
-    for (let i = a; i <= b; i++) excludeChapters.add(String(i).padStart(2, '0'));
-  }
-  for (const s of raw.exclude_chapters_hs2.singles) excludeChapters.add(String(s).padStart(2, '0'));
-
-  const excludeTradeModes = new Set((raw.exclude_trade_modes && raw.exclude_trade_modes.excluded || []).map(String));
-
-  const excludeFirstRegexes = raw.exclude_first_patterns.patterns.map((p) => new RegExp(p));
-  const categoryRegexes = {};
-  for (const [cat, patterns] of Object.entries(raw.categories)) {
-    if (cat.startsWith('_')) continue;
-    categoryRegexes[cat] = patterns.map((p) => new RegExp(p));
-  }
-  const hs8Overrides = raw.include_hs8_overrides || {};
-  return { excludeChapters, excludeTradeModes, excludeFirstRegexes, categoryRegexes, hs8Overrides };
-}
-
-function classify(hs8, name, rules) {
-  const override = rules.hs8Overrides[hs8];
-  if (override && override.category) return { status: 'included', category: override.category };
-  if (rules.excludeFirstRegexes.some((re) => re.test(name))) return { status: 'excluded_industrial' };
-  for (const [cat, regexes] of Object.entries(rules.categoryRegexes)) {
-    if (regexes.some((re) => re.test(name))) return { status: 'included', category: cat };
-  }
-  return { status: 'unmatched' };
-}
+const OUT_PATH = path.join(lib.ROOT, 'data', 'gacc_in.json');
 
 function main() {
   const [, , csvPath, period] = process.argv;
@@ -107,27 +22,27 @@ function main() {
     process.exit(1);
   }
 
-  const text = readRawText(csvPath);
-  const allRows = parseCsv(text);
+  const text = lib.readRawText(csvPath);
+  const allRows = lib.parseCsv(text);
   if (allRows.length < 2) throw new Error('CSV解析结果行数过少，可能解析失败');
 
   const header = allRows[0];
   const col = {
-    partnerCode: findColumn(header, ['贸易伙伴编码']),
-    partnerName: findColumn(header, ['贸易伙伴名称']),
-    hs8: findColumn(header, ['商品编码']),
-    name: findColumn(header, ['商品名称']),
-    valueUsd: findColumn(header, ['美元']),
+    partnerCode: lib.findColumn(header, ['贸易伙伴编码']),
+    partnerName: lib.findColumn(header, ['贸易伙伴名称']),
+    hs8: lib.findColumn(header, ['商品编码']),
+    name: lib.findColumn(header, ['商品名称']),
+    valueUsd: lib.findColumn(header, ['美元']),
   };
   for (const [k, v] of Object.entries(col)) {
     if (v < 0) throw new Error(`CSV表头中找不到必需列"${k}"对应的中文列名，表头可能已变化，需要人工检查：${header.join(' | ')}`);
   }
   // 贸易方式是可选列：这次导出没选它就不勾了，不报错；下次导出时在"输出字段分组"里加选
   // 贸易方式，这个筛选维度就会自动生效。
-  col.tradeMode = findColumn(header, ['贸易方式', '贸易方式名称', '贸易方式代码']);
+  col.tradeMode = lib.findColumn(header, ['贸易方式', '贸易方式名称', '贸易方式代码']);
 
   const dataRows = allRows.slice(1).filter((r) => r[col.hs8] && r[col.hs8].trim());
-  const rules = loadRules();
+  const rules = lib.loadRules();
 
   const partnerCodeVal = dataRows[0] ? dataRows[0][col.partnerCode] : '';
   const partnerNameVal = dataRows[0] ? dataRows[0][col.partnerName] : '';
@@ -135,7 +50,7 @@ function main() {
 
   let stageAIncluded = [];
   const grandTotal = { count: dataRows.length, value_usd: 0 };
-  for (const r of dataRows) grandTotal.value_usd += parseValueUsd(r[col.valueUsd]);
+  for (const r of dataRows) grandTotal.value_usd += lib.parseValueUsd(r[col.valueUsd]);
 
   for (const r of dataRows) {
     const hs8 = r[col.hs8].trim();
@@ -143,7 +58,7 @@ function main() {
     if (!rules.excludeChapters.has(chapter)) stageAIncluded.push(r);
   }
 
-  const stageA = { count: stageAIncluded.length, value_usd: stageAIncluded.reduce((s, r) => s + parseValueUsd(r[col.valueUsd]), 0) };
+  const stageA = { count: stageAIncluded.length, value_usd: stageAIncluded.reduce((s, r) => s + lib.parseValueUsd(r[col.valueUsd]), 0) };
 
   // 贸易方式筛选（可选维度）：只有这次导出包含该列时才生效
   let stageB = stageAIncluded;
@@ -156,7 +71,7 @@ function main() {
       const code = codeMatch ? codeMatch[1] : null;
       if (code && rules.excludeTradeModes.has(code)) {
         excludedTradeMode.count++;
-        excludedTradeMode.value_usd += parseValueUsd(r[col.valueUsd]);
+        excludedTradeMode.value_usd += lib.parseValueUsd(r[col.valueUsd]);
       } else {
         stageB.push(r);
       }
@@ -170,8 +85,8 @@ function main() {
   for (const r of stageB) {
     const hs8 = r[col.hs8].trim();
     const name = r[col.name].trim();
-    const value = parseValueUsd(r[col.valueUsd]);
-    const result = classify(hs8, name, rules);
+    const value = lib.parseValueUsd(r[col.valueUsd]);
+    const result = lib.classify(hs8, name, rules);
     if (result.status === 'excluded_industrial') {
       excludedIndustrial.count++; excludedIndustrial.value_usd += value;
     } else if (result.status === 'included') {
@@ -196,7 +111,7 @@ function main() {
     period,
     partner,
     source_note: '人工从GACC中国海关统计数据在线查询平台导出，非自动抓取',
-    raw_file: path.relative(ROOT, csvPath),
+    raw_file: path.relative(lib.ROOT, csvPath),
     grand_total_all_hs8: grandTotal,
     stage_a_after_chapter_exclude: stageA,
     excluded_trade_mode: excludedTradeMode,

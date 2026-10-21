@@ -132,15 +132,19 @@ circle.spark-import { fill: var(--signal-yellow); }
 .dot-legend.spark-import { background: var(--signal-yellow); }
 
 /* GACC 品类占比横向条形图 */
-.gacc-bar-row { display: grid; grid-template-columns: 1fr 2fr auto; align-items: center; gap: var(--spacing-md); padding: 6px 0; }
+.gacc-bar-row { display: grid; grid-template-columns: 1fr 2fr auto auto; align-items: center; gap: var(--spacing-md); padding: 6px 0; }
 .gacc-bar-label { font-size: 13px; color: var(--text-primary); }
 .gacc-bar-count { font-size: 11px; color: var(--text-tertiary); }
 .gacc-bar-track { background: var(--bg-card-hover); border-radius: var(--radius-sm); height: 14px; overflow: hidden; }
 .gacc-bar-fill { background: var(--navy); height: 100%; border-radius: var(--radius-sm); }
 .gacc-bar-value { font-size: 13px; font-weight: 600; color: var(--navy); text-align: right; white-space: nowrap; }
+.mini-sparkline { width: 90px; height: 22px; display: block; }
+.mini-spark-line { fill: none; stroke-width: 1.5; }
+.mini-spark-line.spark-export { stroke: var(--navy); }
 @media (max-width: 860px) {
   .gacc-bar-row { grid-template-columns: 1fr; gap: 4px; }
   .gacc-bar-value { text-align: left; }
+  .mini-sparkline { width: 100%; }
 }
 
 /* archive page */

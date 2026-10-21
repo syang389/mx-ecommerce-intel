@@ -19,6 +19,8 @@ const INEGI_PATH = path.join(DATA_DIR, 'inegi.json');
 const INEGI_IN_PATH = path.join(DATA_DIR, 'inegi_in.json');
 const GACC_PATH = path.join(DATA_DIR, 'gacc.json');
 const GACC_IN_PATH = path.join(DATA_DIR, 'gacc_in.json');
+const GACC_TS_PATH = path.join(DATA_DIR, 'gacc_timeseries.json');
+const GACC_TS_IN_PATH = path.join(DATA_DIR, 'gacc_timeseries_in.json');
 
 const RECENCY_DAYS = 15;
 
@@ -480,17 +482,130 @@ function mergeGacc(gacc, gaccIn) {
   return gacc;
 }
 
-function renderGaccCategoryBar(name, value, maxValue, count) {
+function mergeGaccTimeseries(ts, tsIn) {
+  if (!tsIn || !tsIn.periods) return ts; // 本次没有新的时间序列数据
+  const periods = ts.periods || (ts.periods = {});
+  for (const [period, data] of Object.entries(tsIn.periods)) {
+    periods[period] = data; // 按period整体覆盖（支持重新处理某个月份时的修订）
+  }
+  const sourceFiles = new Set([...(ts.source_files || []), ...(tsIn.source_files || [])]);
+  ts.source_files = [...sourceFiles];
+  const sorted = Object.keys(periods).sort();
+  ts.coverage = { start_period: sorted[0] || null, end_period: sorted[sorted.length - 1] || null, months: sorted.length };
+  return ts;
+}
+
+// 通用小型内联折线图（单一数值序列），用于GACC品类的21个月趋势小图标
+function renderMiniSparkline(values, cls) {
+  if (!values || values.length < 2) return '';
+  const W = 120, H = 28, PAD = 3;
+  const max = Math.max(...values), min = Math.min(...values);
+  const span = max - min || 1;
+  const x = (i) => PAD + (i * (W - PAD * 2)) / (values.length - 1);
+  const y = (v) => H - PAD - ((v - min) / span) * (H - PAD * 2);
+  const linePath = values.map((v, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  return `<svg class="mini-sparkline" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><path d="${linePath}" class="mini-spark-line ${cls || ''}"/></svg>`;
+}
+
+function renderGaccOverallTrend(ts) {
+  const periods = Object.keys(ts.periods || {}).sort();
+  if (periods.length < 2) {
+    return '<p class="empty-note">月份数据不足，暂无法绘制趋势线（需至少2个月）。</p>';
+  }
+  const W = 560, H = 140, PAD = 28;
+  const values = periods.map((p) => ts.periods[p].total_value_usd);
+  const max = Math.max(...values), min = Math.min(...values);
+  const span = max - min || 1;
+  const x = (i) => PAD + (i * (W - PAD * 2)) / (periods.length - 1);
+  const y = (v) => H - PAD - ((v - min) / span) * (H - PAD * 2);
+  const linePath = values.map((v, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const dots = values.map((v, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="2.5" class="spark-export"/>`).join('');
+  // 每隔几个月标一次横轴，避免21个标签挤在一起
+  const labelStep = Math.ceil(periods.length / 7);
+  const labels = periods
+    .map((p, i) => (i % labelStep === 0 || i === periods.length - 1 ? `<text x="${x(i).toFixed(1)}" y="${H - 6}" class="spark-label" text-anchor="middle">${escapeHtml(p)}</text>` : ''))
+    .join('');
+  return `
+    <svg class="sparkline" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="卖家相关品类月度总额趋势">
+      <path d="${linePath}" class="spark-line spark-export"/>
+      ${dots}
+      ${labels}
+    </svg>`;
+}
+
+function renderGaccYoyTable(ts) {
+  const periods = Object.keys(ts.periods || {});
+  const years = [...new Set(periods.map((p) => p.slice(0, 4)))].sort();
+  if (years.length < 2) {
+    return '<p class="empty-note">目前只有一个年度的数据，暂无法计算同比（至少需要两个年度的重叠月份）。</p>';
+  }
+  const [yA, yB] = years.slice(-2); // 取最近两个年度比较
+  const monthsA = new Set(periods.filter((p) => p.startsWith(yA)).map((p) => p.slice(5, 7)));
+  const monthsB = new Set(periods.filter((p) => p.startsWith(yB)).map((p) => p.slice(5, 7)));
+  const overlapMonths = [...monthsA].filter((m) => monthsB.has(m)).sort();
+  if (overlapMonths.length === 0) {
+    return '<p class="empty-note">两个年度之间没有重叠月份，暂无法计算同比。</p>';
+  }
+
+  const allCats = new Set();
+  for (const p of periods) Object.keys(ts.periods[p].categories || {}).forEach((c) => allCats.add(c));
+
+  const sumFor = (year, cat) => {
+    let s = 0;
+    for (const m of overlapMonths) {
+      const p = `${year}-${m}`;
+      const c = ts.periods[p] && ts.periods[p].categories[cat];
+      if (c) s += c.value_usd;
+    }
+    return s;
+  };
+  const sumTotalFor = (year) => {
+    let s = 0;
+    for (const m of overlapMonths) {
+      const p = `${year}-${m}`;
+      if (ts.periods[p]) s += ts.periods[p].total_value_usd;
+    }
+    return s;
+  };
+
+  const rows = [...allCats]
+    .map((cat) => ({ cat, a: sumFor(yA, cat), b: sumFor(yB, cat) }))
+    .sort((x, y) => y.b - x.b)
+    .map(({ cat, a, b }) => {
+      const yoy = a > 0 ? ((b - a) / a) * 100 : null;
+      return `<tr><td>${escapeHtml(cat)}</td><td>$${fmtNum(a, 0)}</td><td>$${fmtNum(b, 0)}</td><td>${yoy == null ? '-' : pctSpan(yoy)}</td></tr>`;
+    })
+    .join('\n            ');
+
+  const totalA = sumTotalFor(yA), totalB = sumTotalFor(yB);
+  const totalYoy = totalA > 0 ? ((totalB - totalA) / totalA) * 100 : null;
+  const monthLabel = `${overlapMonths[0]}月–${overlapMonths[overlapMonths.length - 1]}月`;
+
+  return `
+      <div class="section-subtitle">同比口径：${escapeHtml(yA)}年${monthLabel} vs ${escapeHtml(yB)}年${monthLabel}（仅比较两年都有数据的重叠月份，保证口径一致）</div>
+      <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
+        <table>
+          <thead><tr><th>品类</th><th>${escapeHtml(yA)}年同期</th><th>${escapeHtml(yB)}年同期</th><th>同比</th></tr></thead>
+          <tbody>
+            ${rows}
+            <tr style="font-weight:700;"><td>合计</td><td>$${fmtNum(totalA, 0)}</td><td>$${fmtNum(totalB, 0)}</td><td>${totalYoy == null ? '-' : pctSpan(totalYoy)}</td></tr>
+          </tbody>
+        </table>
+      </div>`;
+}
+
+function renderGaccCategoryBar(name, value, maxValue, count, sparklineHtml) {
   const pct = maxValue > 0 ? (value / maxValue) * 100 : 0;
   return `
       <div class="gacc-bar-row">
         <div class="gacc-bar-label">${escapeHtml(name)} <span class="gacc-bar-count">(${count}条HS8编码)</span></div>
         <div class="gacc-bar-track"><div class="gacc-bar-fill" style="width:${pct.toFixed(1)}%"></div></div>
+        ${sparklineHtml || ''}
         <div class="gacc-bar-value">$${fmtNum(value, 0)}</div>
       </div>`;
 }
 
-function renderGaccSection(gacc) {
+function renderGaccSection(gacc, gaccTs) {
   if (!gacc || !gacc.latest) {
     return `
       <div class="section-title">🇨🇳 GACC 中国出口墨西哥数据</div>
@@ -515,7 +630,25 @@ function renderGaccSection(gacc) {
         <div class="kpi-card"><div class="kpi-value">${((l.included_total_value_usd / l.stage_a_after_chapter_exclude.value_usd) * 100).toFixed(2)}%</div><div class="kpi-label">占非整章排除后候选总额之比</div></div>
       </div>`;
 
-  const bars = cats.map(([name, v]) => renderGaccCategoryBar(name, v.value_usd, maxCatValue, v.count)).join('\n');
+  const tsPeriods = (gaccTs && gaccTs.periods) || {};
+  const tsPeriodKeys = Object.keys(tsPeriods).sort();
+  const bars = cats
+    .map(([name, v]) => {
+      const series = tsPeriodKeys.map((p) => (tsPeriods[p].categories[name] ? tsPeriods[p].categories[name].value_usd : 0));
+      const spark = series.length >= 2 ? renderMiniSparkline(series, 'spark-export') : '';
+      return renderGaccCategoryBar(name, v.value_usd, maxCatValue, v.count, spark);
+    })
+    .join('\n');
+
+  const trendAndYoy = tsPeriodKeys.length >= 2
+    ? `
+      <div class="card-section-label">月度趋势与同比（${escapeHtml(gaccTs.coverage.start_period)} ~ ${escapeHtml(gaccTs.coverage.end_period)}，共${gaccTs.coverage.months}个月，已按124个相关HS8编码+已筛选贸易方式导出，本阶段无省份维度）</div>
+      <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
+        ${renderGaccOverallTrend(gaccTs)}
+        <div class="spark-legend"><span><span class="dot-legend spark-export"></span>卖家相关品类总额 (USD/月)</span></div>
+      </div>
+      ${renderGaccYoyTable(gaccTs)}`
+    : '';
 
   const detailTables = cats
     .map(([name, v]) => {
@@ -572,11 +705,14 @@ function renderGaccSection(gacc) {
       <div class="section-title">🇨🇳 GACC 中国出口墨西哥数据</div>
       <div class="section-subtitle">中国海关统计数据在线查询平台（人工导出）· HS8位颗粒度 · 已按卖家实际SKU范围筛选 · 专题区域，独立于上方信号卡片体系</div>
       ${asOfBanner}
-      ${kpi}
-      <div class="card-section-label">卖家相关品类占比（按筛选后金额排序）</div>
+      ${trendAndYoy}
+      <div class="card-section-label">卖家相关品类占比（按筛选后金额排序，右侧小图为该品类近${tsPeriodKeys.length || 0}个月趋势）</div>
+      <div class="section-subtitle">注意口径差异：上方同比表是多月累计（见其口径说明），下方条形图金额是单月（${escapeHtml(periodLabel)}）快照，两者不是同一个数字</div>
       <div class="table-wrap" style="margin-bottom:var(--spacing-lg);">
         ${bars}
       </div>
+      <div class="section-subtitle" style="margin-top:var(--spacing-xl); font-weight:700; color:var(--navy);">基准快照：${escapeHtml(periodLabel)}（完整筛选过程，用于审计/复核）</div>
+      ${kpi}
       ${detailTables}
       ${transparency}
       <p style="color:var(--text-secondary); font-size:13px;">
@@ -606,6 +742,8 @@ function main() {
   const inegiIn = readJsonStrict(INEGI_IN_PATH, { last_checked: null, latest: null, history_upserts: [] });
   let gacc = readJson(GACC_PATH, { latest: null, history: [] });
   const gaccIn = readJsonStrict(GACC_IN_PATH, null);
+  let gaccTs = readJson(GACC_TS_PATH, { periods: {}, source_files: [] });
+  const gaccTsIn = readJsonStrict(GACC_TS_IN_PATH, null);
 
   const { addedCount, skippedCount } = mergeIncoming(alerts, incoming, today);
   recomputeStatus(alerts, today);
@@ -632,6 +770,9 @@ function main() {
   gacc = mergeGacc(gacc, gaccIn);
   writeJson(GACC_PATH, gacc);
 
+  gaccTs = mergeGaccTimeseries(gaccTs, gaccTsIn);
+  writeJson(GACC_TS_PATH, gaccTs);
+
   const active = alerts.filter((a) => a.status === 'active');
   const archived = alerts.filter((a) => a.status === 'archived');
 
@@ -655,7 +796,7 @@ function main() {
     TOP_SUMMARY: fmt(meta.top_summary_zh),
     INEGI_TOP_KPI: renderInegiTopKpi(inegi, 'inegi.html'),
     INEGI_SECTION: renderInegiSection(inegi),
-    GACC_SECTION: renderGaccSection(gacc),
+    GACC_SECTION: renderGaccSection(gacc, gaccTs),
   };
 
   for (const cat of CATEGORIES) {
