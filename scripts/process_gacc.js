@@ -108,6 +108,7 @@ function main() {
 
   const header = allRows[0];
   const col = {
+    partnerCode: findColumn(header, ['贸易伙伴编码']),
     partnerName: findColumn(header, ['贸易伙伴名称']),
     hs8: findColumn(header, ['商品编码']),
     name: findColumn(header, ['商品名称']),
@@ -119,6 +120,10 @@ function main() {
 
   const dataRows = allRows.slice(1).filter((r) => r[col.hs8] && r[col.hs8].trim());
   const rules = loadRules();
+
+  const partnerCodeVal = dataRows[0] ? dataRows[0][col.partnerCode] : '';
+  const partnerNameVal = dataRows[0] ? dataRows[0][col.partnerName] : '';
+  const partner = partnerCodeVal ? `${partnerNameVal} (${partnerCodeVal})` : partnerNameVal;
 
   let stageAIncluded = [];
   const grandTotal = { count: dataRows.length, value_usd: 0 };
@@ -163,7 +168,7 @@ function main() {
 
   const output = {
     period,
-    partner: '墨西哥 (Mexico)',
+    partner,
     source_note: '人工从GACC中国海关统计数据在线查询平台导出，非自动抓取',
     raw_file: path.relative(ROOT, csvPath),
     grand_total_all_hs8: grandTotal,

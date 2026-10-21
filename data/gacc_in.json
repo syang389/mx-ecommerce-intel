@@ -1,6 +1,6 @@
 {
   "period": "2026-09",
-  "partner": "墨西哥 (Mexico)",
+  "partner": "墨西哥 (429)",
   "source_note": "人工从GACC中国海关统计数据在线查询平台导出，非自动抓取",
   "raw_file": "data/gacc_raw/2026-09_raw.csv",
   "grand_total_all_hs8": {

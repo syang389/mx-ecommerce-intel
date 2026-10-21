@@ -500,16 +500,12 @@ function renderGaccSection(gacc) {
   const cats = Object.entries(l.categories).sort((a, b) => b[1].value_usd - a[1].value_usd);
   const maxCatValue = cats.length ? cats[0][1].value_usd : 0;
 
+  const periodMatch = /^(\d{4})-(\d{2})$/.exec(l.period);
+  const periodLabel = periodMatch ? `${periodMatch[1]}年${parseInt(periodMatch[2], 10)}月` : l.period;
+
   const asOfBanner = `
       <div class="top-signal-box" style="margin-bottom:var(--spacing-lg);">
-        <h3>数据时效说明</h3>
-        <p>
-          数据期间：<b>${escapeHtml(l.period)}</b>（中国海关统计，贸易伙伴：${escapeHtml(l.partner)}）
-          · 信源：${escapeHtml(l.source_note)}
-          · 原始文件：<code>${escapeHtml(l.raw_file)}</code>
-          <br/>本页<b>不在每日自动更新范围内</b>——GACC查询平台需要人工登录+验证码查询+导出，
-          当你提供新一期（通常按月）导出文件后才会刷新。
-        </p>
+        <p>信源：GACC中国海关统计数据，按贸易伙伴 ${escapeHtml(l.partner)} 筛选 · 数据期间：${escapeHtml(periodLabel)}</p>
       </div>`;
 
   const kpi = `
