@@ -1,5 +1,34 @@
 [
   {
+    "id": "url:www.unotv.com/nacional/senado-aprueba-en-fast-track-reformas-a-la-ley-aduanera-y-quita-candados-a-embargos-precautorios",
+    "category": "customs",
+    "severity": "red",
+    "severity_reason": "《海关法》(Ley Aduanera)改革已完成国会立法程序（众议院10月7日、参议院10月13日先后通过），取消了“低报价值(subvaluación)启动预防性查封(embargo precautorio)需达到50%价值差异”的一般性门槛，部分制度下违法推定门槛降至20%，大幅降低了海关查封货物的触发标准；该法案已转交总统颁布，2027年1月1日生效，直接提高所有申报价值与实际成交价存在差异的跨境进口卖家被查封/冻结货物的合规风险，属于高且紧迫的合规类信号。",
+    "title_zh": "🚨 《海关法》改革完成立法：取消低报价值查封50%门槛，2027年1月1日生效",
+    "facts_zh": [
+      "2026年10月13日，墨西哥参议院以66票赞成、37票反对（一般性）通过了对《海关法》的改革法案（众议院已于约10月7日先行通过），法案已转交总统颁布，预计2027年1月1日起生效。",
+      "改革取消了此前'申报价值与认定价值差异需达到50%以上才可启动预防性查封'的一般性门槛，具体启动标准改由海关当局（ANAM/SAT）后续发布的规范性文件确定；另据报道，在部分制度下，构成违法推定的价值差异门槛由50%降至20%。",
+      "改革同时新增针对石油/石油类产品进口申报虚假信息的处罚，最高可达货值100%的罚款（该条款主要影响能源类进口商，不直接适用于一般消费品跨境卖家）。",
+      "反对党参议员批评审议过程为'快速通道'，称未充分征询报关行(agentes aduanales)行业意见；具体执行细则（查封启动的量化标准）尚待海关当局后续规范性文件明确。"
+    ],
+    "source": {
+      "name": "UnoTV（综合参议院投票结果报道）",
+      "tier": 2,
+      "lang": "es",
+      "url": "https://www.unotv.com/nacional/senado-aprueba-en-fast-track-reformas-a-la-ley-aduanera-y-quita-candados-a-embargos-precautorios/",
+      "date": "2026-10-13"
+    },
+    "actions_zh": [
+      "立即自查近期报关价值申报与实际采购/发票成交价是否存在差异，评估在新规则下（部分制度门槛可能降至20%）被认定为低报并触发预防性查封的风险 — 清关/合规负责人 — 尽快，法规2027年1月1日生效前完成",
+      "密切关注ANAM/SAT后续发布的配套规范性文件，以确认预防性查封启动的具体量化标准（目前法律仅取消50%一般门槛，执行细则未定） — 合规负责人 — 持续",
+      "与报关行书面确认其对新规则下完税价格申报责任及风险提示机制的理解，尤其是涉及小额高频包裹的申报规范性 — 报关行协调 — 2周内",
+      "评估是否需要为高风险SKU（低值高报/高值低报嫌疑较大的品类）提前补充采购发票、付款凭证等支持文件，以应对可能的稽查 — 财务/采购负责人 — 1个月内"
+    ],
+    "first_seen": "2026-10-23",
+    "last_confirmed": "2026-10-23",
+    "status": "active"
+  },
+  {
     "id": "url:dof.gob.mx/nota_detalle_popup.php",
     "category": "reg",
     "severity": "red",
@@ -79,6 +108,34 @@
     ],
     "first_seen": "2026-10-13",
     "last_confirmed": "2026-10-13",
+    "status": "active"
+  },
+  {
+    "id": "url:www.xataka.com.mx/comercio-electronico/mercado-libre-modificara-forma-calcular-reputacion-vendedores-a-partir-21-octubre-mexico",
+    "category": "platform",
+    "severity": "yellow",
+    "severity_reason": "信誉评级计算方式变更（测算周期按销量分为60天/365天两档，且更新频率提高）可能导致部分卖家评级短期内出现波动，进而影响已于10月17日生效的'提供免费配送'附加费折扣档位，但多来源报道细节存在矛盾（另一来源称相关变化发生在9月且采用101笔/60天的不同阈值），且墨西哥本地官方阈值百分比未获确认，紧迫性中等，评为🟡。",
+    "title_zh": "🛒 Mercado Libre墨西哥10月21日起调整卖家信誉评级计算方式，测算周期缩短",
+    "facts_zh": [
+      "Xataka México报道，Mercado Libre自2026年10月21日起在墨西哥调整卖家信誉评级(reputación)的计算方式：评级周期缩短，且不再仅按月更新一次。",
+      "按新规则，近365天内销量低于40笔的卖家，信誉评级按'过去365天'滚动计算；近365天内销量超过40笔的卖家，改为按'过去60天'滚动计算。",
+      "另一行业信源(UpSeller)描述了一次时间和阈值均不同的变化（称发生在9月9日前后，采用'101笔/60天'的新阈值，且提及的是阿根廷等国的案例），与Xataka所述墨西哥10月21日变化存在明显冲突，具体生效细则需以卖家后台官方通知为准。",
+      "信誉评级等级（绿色信誉/MercadoLíderes等）目前已与10月17日生效的'提供免费配送'附加费折扣档位（绿色/旗舰店30%折扣，黄色/灰色20%折扣，见已有台账记录）直接挂钩。"
+    ],
+    "source": {
+      "name": "Xataka México",
+      "tier": 2,
+      "lang": "es",
+      "url": "https://www.xataka.com.mx/comercio-electronico/mercado-libre-modificara-forma-calcular-reputacion-vendedores-a-partir-21-octubre-mexico",
+      "date": "未注明（原文所述生效日期为2026-10-21）"
+    },
+    "actions_zh": [
+      "登录卖家后台核实本账号信誉评级当前采用的测算周期（60天或365天）及是否已按新规则切换，不要仅依赖媒体报道（多源信息存在冲突） — 店铺负责人 — 本周内",
+      "评估自身近365天销量是否超过40笔，提前预估测算窗口缩短后信誉等级是否可能因短期波动（如集中退货/取消）而下滑 — 运营负责人 — 持续",
+      "若信誉等级发生变化，及时核对对10月17日生效的包邮附加费折扣档位的影响，避免物流成本意外上升 — 运营/财务负责人 — 评级变化后1周内"
+    ],
+    "first_seen": "2026-10-23",
+    "last_confirmed": "2026-10-23",
     "status": "active"
   },
   {
